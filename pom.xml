@@ -16,14 +16,15 @@
 		<paper.version>1.19.2-R0.1-SNAPSHOT</paper.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.target>17</maven.compiler.target>
-		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
 
 		<outputDirectory>X:\Minecraft\Servers\1.19\plugins</outputDirectory>
 	</properties>
 
 	<modules>
-		<module>core</module>
+		<module>nWorld</module>
+		<module>nMauris</module>
 	</modules>
 
 	<repositories>
@@ -41,7 +42,7 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<defaultGoal>clean package</defaultGoal>
 		<plugins>
