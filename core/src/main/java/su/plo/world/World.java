@@ -1,7 +1,7 @@
-package su.plo.core;
+package su.plo.world;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Core extends JavaPlugin {
+public class World extends JavaPlugin {
 	public void onEnable() { }
 }

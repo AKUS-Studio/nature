@@ -1,6 +1,6 @@
-name: nCore
-description: nCore
+name: nWorld
+description: nWorld
 version: 0.1
-main: su.plo.nature.core.Core
+main: su.plo.nature.nworld.nWorld
 
 api-version: 1.19
