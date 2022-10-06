@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -23,8 +21,8 @@
 	</properties>
 
 	<modules>
-		<module>nWorld</module>
 		<module>nMauris</module>
+		<module>nWorld</module>
 	</modules>
 
 	<repositories>
@@ -44,6 +42,12 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory> 
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<defaultGoal>clean package</defaultGoal>
 		<plugins>
 			<plugin>

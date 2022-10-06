@@ -1,6 +1,6 @@
 name: nWorld
 description: nWorld
-version: 0.1
-main: su.plo.nature.nworld.nWorld
+version: ${project.version}
+main: su.plo.world.World
 
 api-version: 1.19
