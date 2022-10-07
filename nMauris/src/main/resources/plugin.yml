@@ -1,6 +1,6 @@
 name: nMauris
 description: nMauris
 version: ${project.version}
-main: su.plo.mauris.Mauris
+main: works.akus.mauris.Mauris
 
 api-version: 1.19

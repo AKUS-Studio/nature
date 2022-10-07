@@ -1,4 +1,4 @@
-package su.plo.mauris;
+package works.akus.mauris;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

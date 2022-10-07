@@ -1,6 +1,6 @@
 name: nWorld
 description: nWorld
 version: ${project.version}
-main: su.plo.world.World
+main: works.akus.world.World
 
 api-version: 1.19
