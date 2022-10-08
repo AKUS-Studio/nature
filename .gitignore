@@ -4,3 +4,7 @@ core/.classpath
 .project
 .settings/
 target/
+
+# Intellij Things
+*.iml
+.idea/

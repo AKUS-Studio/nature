@@ -3,4 +3,9 @@ description: nMauris
 version: ${project.version}
 main: works.akus.mauris.Mauris
 
+commands:
+  mauris:
+    usage: /mauris
+    description: General command for nMauris
+
 api-version: 1.19
