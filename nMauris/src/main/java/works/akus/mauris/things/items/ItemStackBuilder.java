@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import works.akus.mauris.Mauris;
+import works.akus.mauris.utils.ColorUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +62,7 @@ public class ItemStackBuilder {
     }
 
     public ItemStackBuilder setDisplayName(String displayName) {
-        this.displayName = Component.text(displayName);
+        this.displayName = Component.text(ColorUtils.format(displayName));
         return this;
     }
 
@@ -75,7 +76,7 @@ public class ItemStackBuilder {
     }
 
     public ItemStackBuilder addLore(String lore){
-        this.lore.add(Component.text(lore));
+        this.lore.add(Component.text(ColorUtils.format(lore)));
         return this;
     }
 

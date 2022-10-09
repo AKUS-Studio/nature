@@ -12,9 +12,9 @@ public class ExampleItem extends MaurisItem {
         builder
                 .setMaterial(Material.STICK)
                 .setCustomModelData(3)
-                .setDisplayName("Example Item")
+                .setDisplayName("&6Example Item")
                 .addEnchant(Enchantment.KNOCKBACK, 10)
-                .addLore("Everybody needs a little something")
+                .addLore("#36454fEverybody needs a little something")
                 .addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         return builder;
