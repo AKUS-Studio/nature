@@ -49,14 +49,10 @@ public class GiveCommand implements MaurisCommand{
 
     @Override
     public List<String> tabComplete(String[] args) {
-
-        String currentArg = args[args.length - 1];
         ThingManager thingManager = Mauris.getInstance().getThingManager();
 
         List<String> ids = new ArrayList<>();
-        for(MaurisThing thing : thingManager.getAllThings()){
-            if(thing instanceof MaurisItem && thing.getId().contains(currentArg)) ids.add(thing.getId());
-        }
+        thingManager.getAllThings().forEach((t) -> ids.add(t.getId()));
 
         return ids;
     }

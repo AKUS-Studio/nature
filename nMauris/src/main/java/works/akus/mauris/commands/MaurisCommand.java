@@ -15,6 +15,8 @@ public interface MaurisCommand {
         return true;
     }
 
+    default boolean tabCompleteMatcher() {return true; }
+
     String name();
     default String permission(){
         return "Mauris.command." + name();

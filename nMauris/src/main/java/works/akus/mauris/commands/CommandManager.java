@@ -106,7 +106,18 @@ public class CommandManager implements TabExecutor {
         else{
             MaurisCommand mc = getCommand(args[0]);
             if(mc == null) return new ArrayList<>();
+
             List<String> tabCompleter = mc.tabComplete(args);
+
+            //Tab Complete Matcher
+            if(mc.tabCompleteMatcher()){
+                String lastArg = args[args.length - 1];
+                List<String> tabMatchList = new ArrayList<>();
+
+                for(String tab : tabCompleter) if(tab.contains(lastArg)) tabMatchList.add(tab);
+
+                tabCompleter = tabMatchList;
+            }
 
             return tabCompleter;
         }
