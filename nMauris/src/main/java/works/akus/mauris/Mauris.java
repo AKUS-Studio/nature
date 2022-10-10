@@ -2,7 +2,7 @@ package works.akus.mauris;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import works.akus.mauris.commands.CommandManager;
-import works.akus.mauris.managers.ThingManager;
+import works.akus.mauris.things.ThingManager;
 
 public class Mauris extends JavaPlugin {
 

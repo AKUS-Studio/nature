@@ -1,12 +1,18 @@
-package works.akus.mauris.managers;
+package works.akus.mauris.things;
 
-import works.akus.mauris.things.MaurisThing;
-import works.akus.mauris.things.items.ExampleItem;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import works.akus.mauris.Mauris;
+import works.akus.mauris.things.items.TestItem;
 import works.akus.mauris.things.items.MaurisItem;
+import works.akus.mauris.things.listeners.MaurisItemListener;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 public class ThingManager {
 
@@ -15,7 +21,8 @@ public class ThingManager {
     public void setUp(){
         thingsLoaded = new HashMap<>();
 
-        registerThing(new ExampleItem());
+        registerThing(new TestItem());
+        Bukkit.getPluginManager().registerEvents(new MaurisItemListener(this), Mauris.getInstance());
     }
 
     public MaurisItem getMaurisItem(String id){
@@ -23,6 +30,19 @@ public class ThingManager {
         if(thing instanceof MaurisItem) return (MaurisItem) thing;
 
         return null;
+    }
+
+    public MaurisItem getMaurisItem(ItemStack itemStack){
+        if(itemStack == null) return null;
+        ItemMeta meta = itemStack.getItemMeta();
+        if(meta == null) return null;
+
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        String value = container.get(new NamespacedKey(Mauris.getInstance(), "maurisid"), PersistentDataType.STRING);
+
+        if(value == null) return null;
+
+        return getMaurisItem(value);
     }
 
     public MaurisThing getThing(String id){

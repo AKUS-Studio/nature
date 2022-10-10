@@ -173,7 +173,6 @@ public class ItemStackBuilder {
         meta.setCustomModelData(customModelData);
 
         PersistentDataContainer data = meta.getPersistentDataContainer();
-
         stringKeysData.forEach((key, value) -> data.set(new NamespacedKey(Mauris.getInstance(), key), PersistentDataType.STRING, value));
 
         item.setItemMeta(meta);

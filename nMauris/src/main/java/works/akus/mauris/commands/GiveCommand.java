@@ -3,8 +3,7 @@ package works.akus.mauris.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import works.akus.mauris.Mauris;
-import works.akus.mauris.managers.ThingManager;
-import works.akus.mauris.things.MaurisThing;
+import works.akus.mauris.things.ThingManager;
 import works.akus.mauris.things.items.MaurisItem;
 
 import java.util.ArrayList;
