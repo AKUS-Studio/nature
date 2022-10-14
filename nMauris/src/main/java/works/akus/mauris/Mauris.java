@@ -2,6 +2,7 @@ package works.akus.mauris;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import works.akus.mauris.commands.CommandManager;
+import works.akus.mauris.resourcepack.ResourcePackUpdater;
 import works.akus.mauris.things.ThingManager;
 
 import java.io.File;
@@ -13,8 +14,11 @@ public class Mauris extends JavaPlugin {
 	ThingManager thingManager;
 	CommandManager commandManager;
 
+	ResourcePackUpdater resourcePackUpdater;
+
 	public void onEnable() {
 		instance = this;
+		createConfig();
 
 		//Managers Setup
 		thingManager = new ThingManager();
@@ -24,14 +28,15 @@ public class Mauris extends JavaPlugin {
 		commandManager.setUp();
 		//
 
-		createConfig();
+		resourcePackUpdater = new ResourcePackUpdater();
+		resourcePackUpdater.check();
 	}
 
 	private void createConfig(){
 		File config = new File(getDataFolder() + File.separator + "config.yml");
 		if (!config.exists()) {
 			getConfig().options().copyDefaults(true);
-			saveDefaultConfig();;
+			saveDefaultConfig();
 		}
 	}
 

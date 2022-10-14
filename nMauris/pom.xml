@@ -9,6 +9,15 @@
 	<version>0.1.1</version>
 
 	<properties>
-		<outputDirectory>V:/</outputDirectory>
+		<outputDirectory>V:\.MyRealm\AKUS\minecraft test server\plugins</outputDirectory>
 	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.lingala.zip4j</groupId>
+			<artifactId>zip4j</artifactId>
+			<version>2.11.2</version>
+		</dependency>
+	</dependencies>
+
 </project>
