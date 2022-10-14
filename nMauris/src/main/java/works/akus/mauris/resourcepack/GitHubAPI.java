@@ -1,17 +1,12 @@
 package works.akus.mauris.resourcepack;
 
 import net.lingala.zip4j.ZipFile;
-import works.akus.mauris.utils.FileUtils;
 
-import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.*;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 public class GitHubAPI {
@@ -65,6 +60,7 @@ public class GitHubAPI {
 
     //Because GitHub creates folder for branch
     public void removeBranchFolder(File zipFile){
+        logger.info("Removing branch folder from a Zip File");
         String extractedFolderName = "extracted-" + UUID.randomUUID();
 
         //Extraction
@@ -90,6 +86,7 @@ public class GitHubAPI {
             throw new RuntimeException(e);
         }
 
+        logger.info("Success");
         //Deleting Folder
         deleteDir(whereToExtract);
     }
