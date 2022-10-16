@@ -29,7 +29,13 @@ public class Mauris extends JavaPlugin {
 		//
 
 		resourcePackUpdater = new ResourcePackUpdater();
-		resourcePackUpdater.check();
+		resourcePackUpdater.setUp();
+	}
+
+	@Override
+	public void onDisable() {
+		super.onDisable();
+		resourcePackUpdater.stop();
 	}
 
 	private void createConfig(){

@@ -1,6 +1,7 @@
 package works.akus.mauris.resourcepack;
 
 import works.akus.mauris.Mauris;
+import works.akus.mauris.utils.HostFileUtil;
 import works.akus.mauris.utils.files.MaurisDataConfig;
 
 import java.io.File;
@@ -19,7 +20,23 @@ public class ResourcePackUpdater {
         dataFile = new MaurisDataConfig(mauris, "data", "resourcepack");
     }
 
-    public void check(){
+    public void setUp(){
+        check();
+        hostResourcePack();
+    }
+
+    public void stop(){
+        hostingServer.stopServer();
+    }
+
+    File resourcePackFile;
+    private void check(){
+        //
+        File dir = new File(mauris.getDataFolder() + File.separator + "resourcepack");
+        dir.mkdirs();
+
+        resourcePackFile = new File(dir + File.separator + "rp.zip");
+        //
 
         GitRepository repo = gitHubAPI.getRepository("AKUS-Studio", "nature-resourcepack", "main");
 
@@ -32,17 +49,25 @@ public class ResourcePackUpdater {
 
         mauris.getLogger().info("ResourcePack is old. Downloading a updated one!");
         //If new
-        File file = new File(mauris.getDataFolder() + File.separator + "resourcepack");
-        file.mkdirs();
 
-        File resourcePackZip = new File(file + File.separator + "rp.zip");
-
-        repo.downloadRepositoryAsZip(resourcePackZip);
-        repo.removeBranchFolder(resourcePackZip);
+        repo.downloadRepositoryAsZip(resourcePackFile);
+        repo.removeBranchFolder(resourcePackFile);
 
         dataFile.getYaml().set("last-commit", newSha);
         dataFile.save();
     }
+
+
+    HostFileUtil hostingServer;
+    String resourcepackUrl;
+    private void hostResourcePack(){
+        mauris.getLogger().info("Hosting ResourcePack..");
+        hostingServer = new HostFileUtil("localhost", 8090);
+        resourcepackUrl = hostingServer.hostFile("resourcepack", resourcePackFile);
+        mauris.getLogger().info("Hosted successfully resourcepack on " + resourcepackUrl);
+
+    }
+
 
 
 
