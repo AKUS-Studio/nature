@@ -1,10 +1,4 @@
-package works.akus.mauris.resourcepack;
-
-import net.lingala.zip4j.ZipFile;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+package works.akus.mauris.resourcepack.github;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,36 +9,41 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Scanner;
 import java.util.UUID;
-import java.util.logging.Logger;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import net.lingala.zip4j.ZipFile;
 
 public class GitRepository {
 
     String owner;
     String repo;
     String branch;
-    GitHubAPI api;
+    GitHubAPI github;
 
-    public GitRepository(String owner, String repo, String branch, GitHubAPI api) {
+    public GitRepository(String owner, String repo, String branch, GitHubAPI github) {
         this.owner = owner;
         this.repo = repo;
         this.branch = branch;
-        this.api = api;
+        this.github = github;
     }
 
     public String getLastCommitId(){
-        String surl = String.format("https://api.github.com/repos/%s/%s/commits",
+        String requestUrl = String.format("https://api.github.com/repos/%s/%s/commits",
                 owner,
                 repo);
 
         try {
-            URL url = new URL(surl);
+            URL url = new URL(requestUrl);
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
 
-            con.setRequestProperty("Authorization", "Bearer " + api.token);
+            con.setRequestProperty("Authorization", "Bearer " + github.token);
             con.setRequestProperty("Content-Type", "application/json");
 
             //Fuck this json api
@@ -70,17 +69,17 @@ public class GitRepository {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
 
-            con.setRequestProperty("Authorization", "Bearer " + api.token);
+            con.setRequestProperty("Authorization", "Bearer " + github.token);
             con.setRequestProperty("Content-Type", "application/zip");
 
-            api.logger.info("Downloading " + owner + "/" + repo + " to a " + outputfile);
+            github.logger.info("Downloading " + owner + "/" + repo + " to a " + outputfile);
             long timestamp = System.currentTimeMillis();
 
             InputStream stream = con.getInputStream();
 
             Files.copy(stream, outputfile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-            api.logger.info("Downloaded in " + (System.currentTimeMillis() - timestamp) + "ms");
+            github.logger.info("Downloaded in " + (System.currentTimeMillis() - timestamp) + "ms");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -91,7 +90,7 @@ public class GitRepository {
 
     //Because GitHub creates folder for branch
     public void removeBranchFolder(File zipFile){
-        api.logger.info("Removing branch folder from a Zip File");
+        github.logger.info("Removing branch folder from a Zip File");
         String extractedFolderName = "extracted-" + UUID.randomUUID();
 
         //Extraction
@@ -117,7 +116,7 @@ public class GitRepository {
             throw new RuntimeException(e);
         }
 
-        api.logger.info("Success");
+        github.logger.info("Success");
         //Deleting Folder
         deleteDir(whereToExtract);
     }

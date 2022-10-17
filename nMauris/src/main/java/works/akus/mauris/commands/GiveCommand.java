@@ -3,8 +3,8 @@ package works.akus.mauris.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import works.akus.mauris.Mauris;
-import works.akus.mauris.things.ThingManager;
-import works.akus.mauris.things.items.MaurisItem;
+import works.akus.mauris.objects.MaurisObjectManager;
+import works.akus.mauris.objects.items.MaurisItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class GiveCommand implements MaurisCommand{
         }
         String id = args[1];
 
-        ThingManager thingManager = Mauris.getInstance().getThingManager();
+        MaurisObjectManager thingManager = Mauris.getInstance().getThingManager();
         MaurisItem item = thingManager.getMaurisItem(id);
         if(item == null){
             player.sendMessage(prefix + "That is not a valid MaurisItem");
@@ -48,7 +48,7 @@ public class GiveCommand implements MaurisCommand{
 
     @Override
     public List<String> tabComplete(String[] args) {
-        ThingManager thingManager = Mauris.getInstance().getThingManager();
+        MaurisObjectManager thingManager = Mauris.getInstance().getThingManager();
 
         List<String> ids = new ArrayList<>();
         thingManager.getAllThings().forEach((t) -> ids.add(t.getId()));

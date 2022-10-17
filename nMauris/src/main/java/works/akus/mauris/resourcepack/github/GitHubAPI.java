@@ -1,4 +1,4 @@
-package works.akus.mauris.resourcepack;
+package works.akus.mauris.resourcepack.github;
 
 import net.lingala.zip4j.ZipFile;
 

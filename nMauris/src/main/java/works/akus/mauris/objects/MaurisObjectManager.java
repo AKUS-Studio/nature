@@ -1,4 +1,4 @@
-package works.akus.mauris.things;
+package works.akus.mauris.objects;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -7,16 +7,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import works.akus.mauris.Mauris;
-import works.akus.mauris.things.items.TestItem;
-import works.akus.mauris.things.items.MaurisItem;
-import works.akus.mauris.things.listeners.MaurisItemListener;
+import works.akus.mauris.objects.items.MaurisItem;
+import works.akus.mauris.objects.items.TestItem;
+import works.akus.mauris.objects.listeners.MaurisItemListener;
 
 import java.util.Collection;
 import java.util.HashMap;
 
-public class ThingManager {
+public class MaurisObjectManager {
 
-    protected HashMap<String, MaurisThing> thingsLoaded;
+    protected HashMap<String, MaurisObject> thingsLoaded;
 
     public void setUp(){
         thingsLoaded = new HashMap<>();
@@ -26,7 +26,7 @@ public class ThingManager {
     }
 
     public MaurisItem getMaurisItem(String id){
-        MaurisThing thing = getThing(id);
+        MaurisObject thing = getThing(id);
         if(thing instanceof MaurisItem) return (MaurisItem) thing;
 
         return null;
@@ -45,21 +45,21 @@ public class ThingManager {
         return getMaurisItem(value);
     }
 
-    public MaurisThing getThing(String id){
+    public MaurisObject getThing(String id){
         id = id.toLowerCase();
         return thingsLoaded.get(id);
     }
 
-    public Collection<MaurisThing> getAllThings(){
+    public Collection<MaurisObject> getAllThings(){
         return thingsLoaded.values();
     }
 
     //
-    public void registerThings(MaurisThing... things){
-        for(MaurisThing thing : things) registerThing(thing);
+    public void registerThings(MaurisObject... things){
+        for(MaurisObject thing : things) registerThing(thing);
     }
 
-    public void registerThing(MaurisThing thing){
+    public void registerThing(MaurisObject thing){
         thingsLoaded.put(thing.getId().toLowerCase(), thing);
     }
 
@@ -74,11 +74,11 @@ public class ThingManager {
         thingsLoaded.remove(id);
     }
 
-    public void unregisterThings(MaurisThing... things){
-        for(MaurisThing thing : things) unregisterThing(thing);
+    public void unregisterThings(MaurisObject... things){
+        for(MaurisObject thing : things) unregisterThing(thing);
     }
 
-    public void unregisterThing(MaurisThing thing){
+    public void unregisterThing(MaurisObject thing){
         unregisterThing(thing.getId());
     }
 

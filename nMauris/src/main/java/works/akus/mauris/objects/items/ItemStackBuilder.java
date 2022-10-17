@@ -1,4 +1,4 @@
-package works.akus.mauris.things.items;
+package works.akus.mauris.objects.items;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;

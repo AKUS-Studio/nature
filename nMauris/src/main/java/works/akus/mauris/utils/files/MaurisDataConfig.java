@@ -8,27 +8,33 @@ import java.io.IOException;
 
 public class MaurisDataConfig {
 
-    Plugin plugin;
-    String name;
-    String path;
+	private static final String FILE_EXTENSION = ".yml";
+	
+    private Plugin plugin;
+    private String name;
+    private String path;
+
+    private File file;
+    private YamlConfiguration yaml;
 
     public MaurisDataConfig(Plugin plugin, String name, String path){
         this.plugin = plugin;
-        this.name = name.replace(".yml", "");
+        this.name = name.replace(FILE_EXTENSION, new String());
         this.path = path;
 
         load();
     }
 
-    File file;
-    YamlConfiguration yaml;
-
     public void load(){
-
-        String path = this.path.isEmpty() ? File.separator : File.separator + this.path + File.separator;
-        String name = this.name + ".yml";
-
+    	String path = File.separator;
+        String name = this.name + FILE_EXTENSION;
+        
+        if (this.path.isEmpty()) {
+        	path += this.path + File.separator;
+        }
+        
         file = new File(plugin.getDataFolder() + path + name);
+        
         if(!file.exists()){
             file.getParentFile().mkdirs();
 
@@ -37,7 +43,6 @@ public class MaurisDataConfig {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
         }
 
         yaml = YamlConfiguration.loadConfiguration(file);

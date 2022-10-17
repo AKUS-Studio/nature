@@ -2,8 +2,8 @@ package works.akus.mauris;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import works.akus.mauris.commands.CommandManager;
-import works.akus.mauris.resourcepack.ResourcePackUpdater;
-import works.akus.mauris.things.ThingManager;
+import works.akus.mauris.objects.MaurisObjectManager;
+import works.akus.mauris.resourcepack.ResourcePackManager;
 
 import java.io.File;
 
@@ -11,31 +11,31 @@ public class Mauris extends JavaPlugin {
 
 	static Mauris instance;
 
-	ThingManager thingManager;
+	MaurisObjectManager thingManager;
 	CommandManager commandManager;
 
-	ResourcePackUpdater resourcePackUpdater;
+	ResourcePackManager resourcePackUpdater;
 
 	public void onEnable() {
 		instance = this;
 		createConfig();
 
 		//Managers Setup
-		thingManager = new ThingManager();
+		thingManager = new MaurisObjectManager();
 		thingManager.setUp();
 
 		commandManager = new CommandManager();
 		commandManager.setUp();
 		//
 
-		resourcePackUpdater = new ResourcePackUpdater();
-		resourcePackUpdater.setUp();
+		resourcePackUpdater = new ResourcePackManager();
+		resourcePackUpdater.setup();
 	}
 
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		resourcePackUpdater.stop();
+		resourcePackUpdater.stopServer();
 	}
 
 	private void createConfig(){
@@ -46,7 +46,7 @@ public class Mauris extends JavaPlugin {
 		}
 	}
 
-	public ThingManager getThingManager() {
+	public MaurisObjectManager getThingManager() {
 		return thingManager;
 	}
 

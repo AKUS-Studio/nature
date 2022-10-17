@@ -1,4 +1,4 @@
-package works.akus.mauris.things.listeners;
+package works.akus.mauris.objects.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -8,13 +8,14 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
-import works.akus.mauris.things.ThingManager;
-import works.akus.mauris.things.items.MaurisItem;
+
+import works.akus.mauris.objects.MaurisObjectManager;
+import works.akus.mauris.objects.items.MaurisItem;
 
 public class MaurisItemListener implements Listener {
 
-    ThingManager manager;
-    public MaurisItemListener(ThingManager manager){
+    MaurisObjectManager manager;
+    public MaurisItemListener(MaurisObjectManager manager){
         this.manager = manager;
     }
 
