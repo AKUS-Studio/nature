@@ -19,7 +19,7 @@ public class MaurisDataConfig {
 
     public MaurisDataConfig(Plugin plugin, String name, String path){
         this.plugin = plugin;
-        this.name = name.replace(FILE_EXTENSION, new String());
+        this.name = name.replace(FILE_EXTENSION, "");
         this.path = path;
 
         load();
@@ -29,7 +29,7 @@ public class MaurisDataConfig {
     	String path = File.separator;
         String name = this.name + FILE_EXTENSION;
         
-        if (this.path.isEmpty()) {
+        if (!this.path.isEmpty()) {
         	path += this.path + File.separator;
         }
         
