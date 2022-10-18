@@ -1,11 +1,12 @@
 package works.akus.mauris;
 
+import java.io.File;
+
 import org.bukkit.plugin.java.JavaPlugin;
+
 import works.akus.mauris.commands.CommandManager;
 import works.akus.mauris.objects.MaurisObjectManager;
 import works.akus.mauris.resourcepack.ResourcePackManager;
-
-import java.io.File;
 
 public class Mauris extends JavaPlugin {
 
@@ -20,7 +21,7 @@ public class Mauris extends JavaPlugin {
 		instance = this;
 		createConfig();
 
-		//Managers Setup
+		// Managers Setup
 		thingManager = new MaurisObjectManager();
 		thingManager.setUp();
 
@@ -28,17 +29,31 @@ public class Mauris extends JavaPlugin {
 		commandManager.setUp();
 		//
 
-		resourcePackUpdater = new ResourcePackManager();
-		resourcePackUpdater.setup();
+		if (isGithubTokenSet()) {
+			resourcePackUpdater = new ResourcePackManager();
+			resourcePackUpdater.setup();
+		} else {
+			getLogger().warning("GitHub token is not set, resource pack updater was not enabled.");
+		}
 	}
 
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		resourcePackUpdater.stopServer();
+
+		if (resourcePackUpdater != null) {
+			resourcePackUpdater.stopServer();
+		}
 	}
 
-	private void createConfig(){
+	private boolean isGithubTokenSet() {
+		final String path = "resource-pack-updater.github-token";
+		if (!this.getConfig().isSet(path))
+			return false;
+		return !(this.getConfig().getString(path).isBlank());
+	}
+
+	private void createConfig() {
 		File config = new File(getDataFolder() + File.separator + "config.yml");
 		if (!config.exists()) {
 			getConfig().options().copyDefaults(true);
