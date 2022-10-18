@@ -2,10 +2,13 @@ package works.akus.mauris.resourcepack;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import works.akus.mauris.Mauris;
 import works.akus.mauris.resourcepack.github.GitHubAPI;
 import works.akus.mauris.resourcepack.github.GitRepository;
 import works.akus.mauris.resourcepack.hosting.FileHostServer;
+import works.akus.mauris.resourcepack.listeners.ResourcePackListener;
+import works.akus.mauris.utils.HashCalculator;
 import works.akus.mauris.utils.files.MaurisDataConfig;
 
 public class ResourcePackManager {
@@ -21,9 +24,12 @@ public class ResourcePackManager {
 	
 	private MaurisDataConfig dataFile;
 	private File resourcePackFile;
+	private byte[] resourcePackHash;
 	
 	private FileHostServer server;
 	private String resourcepackUrl;
+
+	private ResourcePackListener packListener;
 	
 	public ResourcePackManager() {
 		this.mauris = Mauris.getInstance();
@@ -34,6 +40,11 @@ public class ResourcePackManager {
 	public void setup() {
 		checkAndUpdate();
 		hostResourcePack();
+
+		if(packListener == null){
+			packListener = new ResourcePackListener(this);
+			Bukkit.getPluginManager().registerEvents(packListener, mauris);
+		}
 	}
 
 	public void stopServer() {
@@ -54,6 +65,7 @@ public class ResourcePackManager {
 
 		String newSha = repository.getLastCommitId();
 		String savedSha = dataFile.getYaml().getString("last-commit", "");
+		resourcePackHash = (byte[]) dataFile.getYaml().get("hash");
 		
 		if (newSha.equals(savedSha)) {
 			mauris.getLogger().info("ResourcePack is up to date!");
@@ -65,11 +77,14 @@ public class ResourcePackManager {
 		repository.downloadRepositoryAsZip(resourcePackFile);
 		repository.removeBranchFolder(resourcePackFile);
 
-		updateLastCommit(newSha);
+		resourcePackHash = HashCalculator.calcSHA1Hash(resourcePackFile);
+
+		updateLastCommit(newSha, resourcePackHash);
 	}
 	
-	private void updateLastCommit(String newSha) {
-		dataFile.getYaml().set("last-commit", newSha);
+	private void updateLastCommit(String commitSha, byte[] fileHash) {
+		dataFile.getYaml().set("last-commit", commitSha);
+		dataFile.getYaml().set("hash", fileHash);
 		dataFile.save();
 	}
 
@@ -82,4 +97,25 @@ public class ResourcePackManager {
 		mauris.getLogger().info("Hosted successfully resourcepack on " + resourcepackUrl);
 	}
 
+	public byte[] getResourcePackHash() {return resourcePackHash; }
+
+	public Mauris getMauris() {
+		return mauris;
+	}
+
+	public GitHubAPI getGithub() {
+		return github;
+	}
+
+	public File getResourcePackFile() {
+		return resourcePackFile;
+	}
+
+	public FileHostServer getServer() {
+		return server;
+	}
+
+	public String getResourcepackUrl() {
+		return resourcepackUrl;
+	}
 }
