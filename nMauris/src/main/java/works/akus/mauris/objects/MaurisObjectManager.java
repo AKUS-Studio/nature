@@ -26,12 +26,18 @@ public class MaurisObjectManager {
     }
 
     public MaurisItem getMaurisItem(String id){
-        MaurisObject thing = getThing(id);
+        MaurisObject thing = getObject(id);
         if(thing instanceof MaurisItem) return (MaurisItem) thing;
 
         return null;
     }
 
+    /**
+     * Gets MaurisItem from ItemStack's meta
+     *
+     * @param itemStack ItemStack, based on which meta will determine which is MaurisItem is that
+     * @return MaurisItem
+     */
     public MaurisItem getMaurisItem(ItemStack itemStack){
         if(itemStack == null) return null;
         ItemMeta meta = itemStack.getItemMeta();
@@ -45,7 +51,13 @@ public class MaurisObjectManager {
         return getMaurisItem(value);
     }
 
-    public MaurisObject getThing(String id){
+    /**
+     * Gets MaurisObject from id
+     *
+     * @param id ID of the MaurisObject. Example: example_item
+     * @return MaurisObject
+     */
+    public MaurisObject getObject(String id){
         id = id.toLowerCase();
         return thingsLoaded.get(id);
     }

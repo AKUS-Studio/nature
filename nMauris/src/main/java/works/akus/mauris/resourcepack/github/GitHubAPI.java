@@ -1,12 +1,5 @@
 package works.akus.mauris.resourcepack.github;
 
-import net.lingala.zip4j.ZipFile;
-
-import java.io.*;
-import java.net.*;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 public class GitHubAPI {

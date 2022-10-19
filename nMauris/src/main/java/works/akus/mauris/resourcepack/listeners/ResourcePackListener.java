@@ -1,12 +1,14 @@
 package works.akus.mauris.resourcepack.listeners;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import works.akus.mauris.resourcepack.ResourcePackManager;
+import works.akus.mauris.resourcepack.events.ResourcePackCompleteEvent;
 
 import static works.akus.mauris.utils.ColorUtils.format;
 
@@ -45,6 +47,9 @@ public class ResourcePackListener implements Listener {
             case ACCEPTED: break;
             case SUCCESSFULLY_LOADED: {
                 p.sendMessage(SUCCESSFULLY_LOADED_MESSAGE);
+
+                ResourcePackCompleteEvent resourcePackCompleteEvent = new ResourcePackCompleteEvent(p, status, manager);
+                Bukkit.getPluginManager().callEvent(resourcePackCompleteEvent);
                 break;
             }
             case FAILED_DOWNLOAD: {
