@@ -1,52 +1,63 @@
 package works.akus.mauris.objects.fonts;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 
 public class GlyphBuilder {
 
-	private StringBuilder builder;
 	private TextComponent component;
-	
+	private String nextFont;
+
 	public GlyphBuilder() {
-		builder = new StringBuilder();
 		component = Component.empty();
 	}
 
 	public GlyphBuilder setFont(String font) {
+		this.nextFont = font;
 		return this;
 	}
 
 	public GlyphBuilder append(String text) {
-		return this;
+		TextComponent appended = Component.text(text);
+
+		if (nextFont != null) {
+			appended.font(Key.key(nextFont));
+		}
+
+		return append(appended);
 	}
 
 	public GlyphBuilder append(TextComponent component) {
+		this.component = this.component.append(component);
 		return this;
 	}
 
 	public GlyphBuilder append(Glyph glyph) {
-		return this;
+		return append(glyph.toTextComponent());
 	}
 
 	public GlyphBuilder offset(int pixels) {
-		return this;
+		return append(Fonts.getOffset(pixels));
 	}
 
 	public GlyphBuilder leftShift(int pixels) {
-		return this;
+		return offset(-pixels);
 	}
 
 	public GlyphBuilder rightShift(int pixels) {
-		return this;
+		return offset(Math.abs(pixels));
 	}
 
 	public TextComponent buildAsComponent() {
-		return null;
+		return this.component;
 	}
 
-	public TextComponent buildAsString() {
-		return null;
+	/**
+	 * @deprecated Fonts aren't supported in vanilla strings
+	 */
+	public String buildAsString() {
+		return component.toString();
 	}
 
 }
