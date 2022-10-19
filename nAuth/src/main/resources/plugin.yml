@@ -1,0 +1,6 @@
+name: nAuth
+description: nAuth
+version: ${project.version}
+main: works.akus.auth.Auth
+api-version: 1.19
+
