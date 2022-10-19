@@ -23,6 +23,7 @@
 	<modules>
 		<module>nMauris</module>
 		<module>nWorld</module>
+		<module>nAuth</module>
 	</modules>
 
 	<repositories>
