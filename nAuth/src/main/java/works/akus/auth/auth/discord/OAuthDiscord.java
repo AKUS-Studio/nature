@@ -10,8 +10,6 @@ import java.util.UUID;
 public class OAuthDiscord {
 
     public final static int port = 9090;
-    public final static String REDIRECT_URI = "http%3A%2F%2Flocalhost%3A9090%2Fauth";
-    public final static String AUTH_LINK = "https://discord.com/oauth2/authorize?client_id=1032909655984328724&redirect_uri=" + REDIRECT_URI + "&response_type=code&scope=email%20identify";
     int TIMEOUT = 10000; // In seconds
 
     HashMap<String, Player> PendingUsers = new HashMap<>();
@@ -35,7 +33,9 @@ public class OAuthDiscord {
             if(p == null) return false;
 
             OAuthTask task = tasks.get(p);
-            if(task != null) task.run(null);
+
+            DiscordUser user = DiscordAPI.generateDiscordUser(code);
+            if(task != null) task.run(user);
             removePending(p);
             return true;
         }));
@@ -60,7 +60,7 @@ public class OAuthDiscord {
         PendingUsersInverse.put(player, authid);
         tasks.put(player, task);
 
-        return AUTH_LINK + "&state=" + authid;
+        return DiscordAPI.AUTH_LINK + "&state=" + authid;
     }
 
     private void removePending(Player p){
@@ -80,7 +80,7 @@ public class OAuthDiscord {
     }
 
     public String getAuthLink(Player p){
-        return AUTH_LINK + "&state=" + getAuthId(p);
+        return DiscordAPI.AUTH_LINK + "&state=" + getAuthId(p);
     }
 
     private String generateId(){

@@ -36,7 +36,7 @@ public class PrisonSystem implements Listener {
                 player.setSpectatorTarget(stand);
                 lp.setStand(stand);
             }
-        }.run();
+        }.runTask(Auth.getInstance());
     }
 
     public static void unlockPlayer(Player p){
@@ -50,12 +50,12 @@ public class PrisonSystem implements Listener {
     public static void unlockPlayer(LockedPlayer p){
         if(p == null) return;
 
-        new BukkitRunnable() {
+        if(Auth.getInstance().isEnabled()) new BukkitRunnable() {
             @Override
             public void run() {
-                    p.getPlayer().setSpectatorTarget(null);
-                    p.getStand().remove();
-                    p.getPlayer().setGameMode(GameMode.SURVIVAL);
+                p.getPlayer().setSpectatorTarget(null);
+                p.getStand().remove();
+                p.getPlayer().setGameMode(GameMode.SURVIVAL);
             }
         }.runTask(Auth.getInstance());
 

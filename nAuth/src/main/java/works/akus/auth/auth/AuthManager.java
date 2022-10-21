@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import works.akus.auth.Auth;
+import works.akus.auth.auth.discord.DiscordUser;
 import works.akus.auth.auth.discord.OAuthDiscord;
 import works.akus.auth.utils.PrisonSystem;
 
@@ -46,8 +47,8 @@ public class AuthManager implements Listener {
                         .append(Component.text("\n \n \n --------------------------------"));
     }
 
-    private Component getSuccessAuthMessage(){
-        return Component.text("Вы успешно вошли!");
+    private Component getSuccessAuthMessage(DiscordUser user){
+        return Component.text("Вы успешно вошли! " + user.getName() + "#" + user.getDiscriminator());
     }
 
     Auth auth;
@@ -78,13 +79,19 @@ public class AuthManager implements Listener {
     public void authPlayer(Player p){
         if(playersInAuth.contains(p)) throw new RuntimeException("Tried to authorize player several times");
 
-        PrisonSystem.lockPlayer(p);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                PrisonSystem.lockPlayer(p);
+            }
+        }.runTask(Auth.getInstance());
+
         playersInAuth.add(p);
 
         oAuth.addPending(p, (du) ->{
             cancelAuthPlayer(p);
             clearChat(p);
-            p.sendMessage(getSuccessAuthMessage());
+            p.sendMessage(getSuccessAuthMessage(du));
             authorizedPlayers.put(p, new AuthPlayer(du, p));
         });
 
