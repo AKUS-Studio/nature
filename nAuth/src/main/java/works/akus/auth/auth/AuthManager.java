@@ -20,6 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import works.akus.auth.Auth;
 import works.akus.auth.auth.discord.DiscordUser;
 import works.akus.auth.auth.discord.OAuthDiscord;
+import works.akus.auth.auth.events.AuthEvent;
 import works.akus.auth.utils.PrisonSystem;
 
 import java.util.ArrayList;
@@ -89,10 +90,18 @@ public class AuthManager implements Listener {
         playersInAuth.add(p);
 
         oAuth.addPending(p, (du) ->{
+
+            AuthPlayer au = new AuthPlayer(du, p);
+            AuthEvent event = new AuthEvent(au);
+            Bukkit.getPluginManager().callEvent(event);
+            if(event.isCancelled()) return;
+
             cancelAuthPlayer(p);
+
             clearChat(p);
             p.sendMessage(getSuccessAuthMessage(du));
-            authorizedPlayers.put(p, new AuthPlayer(du, p));
+
+            authorizedPlayers.put(p, au);
         });
 
     }

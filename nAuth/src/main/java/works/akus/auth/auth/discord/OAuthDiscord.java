@@ -44,8 +44,7 @@ public class OAuthDiscord {
     public void stopServer(){
         server.stop();
     }
-
-    //
+    
     /**
      *
      * @param player Player that needed to generate ID
