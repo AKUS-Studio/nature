@@ -99,13 +99,15 @@ public class AuthManager implements Listener {
 
         //Checking Database
         AuthPlayer authDatabasePlayer = authDatabase.loadAuthPlayer(p);
-        String discord_id = null;
+        String stored_discord_id = null;
+        Long stored_created_at = null;
 
         long timestamp = new Date().getTime();
         if(authDatabasePlayer != null) {
             long lastAuthorized = authDatabasePlayer.getLastAuthorized();
             String storedIp = authDatabasePlayer.getLastIp();
-            discord_id = authDatabasePlayer.getUser().getId();
+            stored_discord_id = authDatabasePlayer.getUser().getId();
+            stored_created_at = authDatabasePlayer.getCreatedAt();
 
             TokenInfo storedToken = authDatabasePlayer.getUser().getTokenInfo();
 
@@ -128,22 +130,23 @@ public class AuthManager implements Listener {
 
         playersInAuth.add(p);
         //Adding Pending Auth Player and when authorized do lambda
-        String storedDiscord_id = discord_id;
+        String finalDBDiscordId = stored_discord_id;
+        Long finalDBCreatedAt = stored_created_at;
         oAuth.addPending(p, (du) ->{
-            if(storedDiscord_id != null && !du.getId().equals(storedDiscord_id)){
+            if(finalDBDiscordId != null && !du.getId().equals(finalDBDiscordId)){
                 cancelAuthPlayer(p);
                 p.kick(Component.text("Ваш майнкрафт никнейм привязан к другому дискорд аккаунту"));
                 return;
             }
 
             String minecraftUsernameByDiscordId = authDatabase.getMinecraftUsername(du.getId());
-            if(storedDiscord_id == null && minecraftUsernameByDiscordId != null){
+            if(finalDBDiscordId == null && minecraftUsernameByDiscordId != null){
                 p.kick(Component.text("Ваш дискорд аккаунт уже зарегестрирован на другой майнкрафт аккаунт"));
                 return;
             }
 
-
-            AuthPlayer au = new AuthPlayer(du, p, ip, timestamp, timestamp);
+            long createdAtTimestamp = finalDBCreatedAt == null ? timestamp : finalDBCreatedAt;
+            AuthPlayer au = new AuthPlayer(du, p, ip, timestamp, timestamp, createdAtTimestamp);
             AuthEvent event = new AuthEvent(au);
 
             Bukkit.getPluginManager().callEvent(event);

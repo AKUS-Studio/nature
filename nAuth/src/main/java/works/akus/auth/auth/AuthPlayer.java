@@ -3,21 +3,15 @@ package works.akus.auth.auth;
 import org.bukkit.entity.Player;
 import works.akus.auth.auth.discord.DiscordUser;
 
-import java.util.Date;
-
 public class AuthPlayer {
 
-    public AuthPlayer(DiscordUser user, Player player) {
-        this.user = user;
-        this.player = player;
-    }
-
-    public AuthPlayer(DiscordUser user, Player player, String lastIp, long lastLogged, long lastAuthorized) {
+    public AuthPlayer(DiscordUser user, Player player, String lastIp, long lastLogged, long lastAuthorized, long createdAt) {
         this.user = user;
         this.player = player;
         this.lastIp = lastIp;
         this.lastLogged = lastLogged;
         this.lastAuthorized = lastAuthorized;
+        this.createdAt = createdAt;
     }
 
     DiscordUser user;
@@ -26,6 +20,7 @@ public class AuthPlayer {
     String lastIp;
     long lastLogged;
     long lastAuthorized;
+    long createdAt;
 
     public void updateUser(DiscordUser user) {
         this.user = user;
@@ -53,5 +48,9 @@ public class AuthPlayer {
 
     public long getLastAuthorized() {
         return lastAuthorized;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
     }
 }

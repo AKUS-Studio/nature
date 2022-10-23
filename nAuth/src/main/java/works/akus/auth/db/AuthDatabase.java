@@ -88,6 +88,7 @@ public class AuthDatabase {
             String last_ip = set.getString("last_ip");
             long last_logged = set.getLong("last_logged");
             long last_authorized = set.getLong("last_authorized");
+            long created_at = set.getLong("created_at");
 
             //TokenInfo
             String tokenSelectRequest = "SELECT * FROM TokenInfo WHERE discord_id='" + discord_id + "'";
@@ -110,7 +111,7 @@ public class AuthDatabase {
             );
 
             DiscordUser user = new DiscordUser(discord_id, null, null, ti);
-            AuthPlayer au = new AuthPlayer(user, player, last_ip, last_logged, last_authorized);
+            AuthPlayer au = new AuthPlayer(user, player, last_ip, last_logged, last_authorized, created_at);
 
             return au;
 
@@ -143,12 +144,13 @@ public class AuthDatabase {
 
             }else{
 
-                String insertIntoRequest = "INSERT INTO AuthUsers (minecraft_username,discord_id,last_logged,last_authorized,last_ip) VALUES (" +
+                String insertIntoRequest = "INSERT INTO AuthUsers (minecraft_username,discord_id,last_logged,last_authorized,last_ip,created_at) VALUES (" +
                         "'" + minecraft_username + "'," +
                         "'" + authPlayer.getUser().getId() + "'," +
                         "'" + authPlayer.getLastLogged() +"'," +
                         "'" + authPlayer.getLastAuthorized() + "'," +
-                        "'" + authPlayer.getLastIp() + "'" +
+                        "'" + authPlayer.getLastIp() + "'," +
+                        "'" + authPlayer.getCreatedAt() + "'" +
                         ");";
 
                 con.prepareStatement(insertIntoRequest).execute();
@@ -202,6 +204,7 @@ public class AuthDatabase {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "minecraft_username TEXT NOT NULL UNIQUE," +
                 "discord_id TEXT NOT NULL UNIQUE," +
+                "created_at BIGINT," +
                 "last_logged BIGINT," +
                 "last_authorized BIGINT," +
                 "last_ip TEXT" +
