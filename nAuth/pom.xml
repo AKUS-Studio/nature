@@ -10,7 +10,7 @@
         <version>0.0.1</version>
     </parent>
     <artifactId>nAuth</artifactId>
-    <version>0.0.0</version>
+    <version>0.1.0</version>
 
     <properties>
         <outputDirectory>V:\.MyRealm\AKUS\minecraft test server\plugins</outputDirectory>

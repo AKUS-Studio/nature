@@ -110,7 +110,9 @@ public class AuthManager implements Listener {
             TokenInfo storedToken = authDatabasePlayer.getUser().getTokenInfo();
 
             //Auto IP Logging
-            if (IpAuthorization && storedIp.equals(ip) && lastAuthorized + hoursIpAuthorizationLast * 60L * 60L * 1000L > timestamp) {
+            boolean ipAuth = IpAuthorization && storedIp.equals(ip) && lastAuthorized + hoursIpAuthorizationLast * 60L * 60L * 1000L > timestamp;
+
+            if (ipAuth) {
                 DiscordUser user = DiscordAPI.getDiscordUserByToken(storedToken);
                 authDatabasePlayer.updateUser(user);
                 authDatabasePlayer.setLastLogged(timestamp);
