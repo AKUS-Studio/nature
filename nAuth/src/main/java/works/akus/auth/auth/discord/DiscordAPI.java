@@ -3,6 +3,7 @@ package works.akus.auth.auth.discord;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.yaml.snakeyaml.tokens.Token;
 
 import java.io.*;
 import java.net.*;
@@ -18,24 +19,18 @@ public class DiscordAPI {
     public static final String CLIENT_ID = "1032909655984328724";
     private static final String CLIENT_SECRET = "-J8uRLiaQJKfbWBIq-8HZzzwl-H5q6Us";
 
+    public final static String SCOPES = "email%20identify";
+    public final static String TOKEN_TYPE = "BEARER";
+
     public final static String REDIRECT_URI_NORMAL = "http://localhost:9090/auth";
     public final static String REDIRECT_URI = "http%3A%2F%2Flocalhost%3A9090%2Fauth";
-    public final static String AUTH_LINK = "https://discord.com/oauth2/authorize?client_id=1032909655984328724&redirect_uri=" + REDIRECT_URI + "&response_type=code&scope=email%20identify";
+    public final static String AUTH_LINK = "https://discord.com/oauth2/authorize?client_id=1032909655984328724&redirect_uri=" + REDIRECT_URI + "&response_type=code&scope=" + SCOPES;
 
     public static String getAuthLink(){
         return AUTH_LINK;
     }
 
-    public static DiscordUser generateDiscordUser(String auth_code){
-        JSONObject jsonToken = getJsonObjectToken(auth_code);
-        TokenInfo info = new TokenInfo(
-                (String) jsonToken.get("access_token"),
-                (String) jsonToken.get("token_type"),
-                jsonToken.get("expires_in").toString(),
-                (String) jsonToken.get("refresh_token"),
-                (String) jsonToken.get("scope")
-        );
-
+    public static DiscordUser getDiscordUserByToken(TokenInfo info){
         JSONObject userObject = getDiscordUserInfo(info);
 
         String userId = (String) userObject.get("id");
@@ -43,6 +38,20 @@ public class DiscordAPI {
         String discriminator = (String) userObject.get("discriminator");
 
         return new DiscordUser(userId, username, discriminator, info);
+    }
+
+    public static DiscordUser getDiscordUserByCode(String auth_code){
+        JSONObject jsonToken = getJsonObjectToken(auth_code);
+        TokenInfo info = new TokenInfo(
+                (String) jsonToken.get("access_token"),
+                (String) jsonToken.get("token_type"),
+                jsonToken.get("expires_in").toString(),
+                (String) jsonToken.get("refresh_token"),
+                (String) jsonToken.get("scope"),
+                new Date().getTime()
+        );
+
+        return getDiscordUserByToken(info);
     }
 
     public static JSONObject getDiscordUserInfo(TokenInfo info){

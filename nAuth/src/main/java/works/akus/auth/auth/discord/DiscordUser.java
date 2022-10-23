@@ -13,6 +13,11 @@ public class DiscordUser {
     String name;
     String discriminator;
 
+    public void updateName(String name, String discriminator){
+        this.name = name;
+        this.discriminator = discriminator;
+    }
+
     TokenInfo tokenInfo;
 
     public String getId() {

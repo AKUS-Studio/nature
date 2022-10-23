@@ -1,10 +1,12 @@
 package works.akus.auth.auth.events;
 
+import io.papermc.paper.event.player.AsyncChatDecorateEvent;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import works.akus.auth.auth.AuthPlayer;
 import works.akus.auth.auth.discord.DiscordUser;
 
@@ -26,6 +28,7 @@ public class AuthEvent extends Event implements Cancellable {
     DiscordUser discordUser;
 
     public AuthEvent(AuthPlayer authplayer){
+        super(true);
         this.authPlayer = authplayer;
         this.player = authplayer.getPlayer();
         this.discordUser = authplayer.getUser();

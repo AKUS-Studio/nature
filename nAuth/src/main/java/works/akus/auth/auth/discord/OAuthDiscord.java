@@ -34,7 +34,7 @@ public class OAuthDiscord {
 
             OAuthTask task = tasks.get(p);
 
-            DiscordUser user = DiscordAPI.generateDiscordUser(code);
+            DiscordUser user = DiscordAPI.getDiscordUserByCode(code);
             if(task != null) task.run(user);
             removePending(p);
             return true;
@@ -44,7 +44,7 @@ public class OAuthDiscord {
     public void stopServer(){
         server.stop();
     }
-    
+
     /**
      *
      * @param player Player that needed to generate ID

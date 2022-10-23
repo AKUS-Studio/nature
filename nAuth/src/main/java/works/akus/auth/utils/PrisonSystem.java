@@ -40,7 +40,16 @@ public class PrisonSystem implements Listener {
     }
 
     public static void unlockPlayer(Player p){
-        unlockPlayer(getLockedPlayer(p));
+        unlockPlayer(p, 20);
+    }
+
+    public static void unlockPlayer(Player p, int delay){
+        if(Auth.getInstance().isEnabled()) new BukkitRunnable() {
+            @Override
+            public void run() {
+                unlockPlayer(getLockedPlayer(p));
+            }
+        }.runTaskLater(Auth.getInstance(), delay);
     }
 
     public static LockedPlayer getLockedPlayer(Player p){
@@ -50,14 +59,9 @@ public class PrisonSystem implements Listener {
     public static void unlockPlayer(LockedPlayer p){
         if(p == null) return;
 
-        if(Auth.getInstance().isEnabled()) new BukkitRunnable() {
-            @Override
-            public void run() {
-                p.getPlayer().setSpectatorTarget(null);
-                p.getStand().remove();
-                p.getPlayer().setGameMode(GameMode.SURVIVAL);
-            }
-        }.runTask(Auth.getInstance());
+        p.getPlayer().setSpectatorTarget(null);
+        p.getStand().remove();
+        p.getPlayer().setGameMode(GameMode.SURVIVAL);
 
         lockedPlayers.remove(p.getPlayer());
     }
