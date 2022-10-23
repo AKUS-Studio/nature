@@ -24,7 +24,7 @@ public class DiscordAPI {
 
     public final static String REDIRECT_URI_NORMAL = "http://localhost:9090/auth";
     public final static String REDIRECT_URI = "http%3A%2F%2Flocalhost%3A9090%2Fauth";
-    public final static String AUTH_LINK = "https://discord.com/oauth2/authorize?client_id=1032909655984328724&redirect_uri=" + REDIRECT_URI + "&response_type=code&scope=" + SCOPES;
+    public final static String AUTH_LINK = "https://discord.com/oauth2/authorize?client_id=1032909655984328724&redirect_uri=" + REDIRECT_URI + "&response_type=code&scope=" + SCOPES + "&prompt=none";
 
     public static String getAuthLink(){
         return AUTH_LINK;

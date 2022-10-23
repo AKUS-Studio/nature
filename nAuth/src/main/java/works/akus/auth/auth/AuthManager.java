@@ -30,7 +30,7 @@ public class AuthManager implements Listener {
 
     public final boolean AUTH_AFTER_RESOURCEPACK = true;
 
-    public final boolean IpAuthorization = false;
+    public final boolean IpAuthorization = true;
     public final int hoursIpAuthorizationLast = 48;
 
     private void clearChat(Player p){
