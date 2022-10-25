@@ -85,6 +85,7 @@ public class AuthDatabase {
             if(!set.next()) return null;
 
             String discord_id = set.getString("discord_id");
+            String email = set.getString("email");
             String last_ip = set.getString("last_ip");
             long last_logged = set.getLong("last_logged");
             long last_authorized = set.getLong("last_authorized");
@@ -110,7 +111,7 @@ public class AuthDatabase {
                     taken_at
             );
 
-            DiscordUser user = new DiscordUser(discord_id, null, null, ti);
+            DiscordUser user = new DiscordUser(discord_id, null, null, email, ti);
             AuthPlayer au = new AuthPlayer(user, player, last_ip, last_logged, last_authorized, created_at);
 
             return au;
@@ -135,7 +136,8 @@ public class AuthDatabase {
             if(exists){
 
                 String updateRequest = "UPDATE AuthUsers SET " +
-                        "last_ip='" + authPlayer.getLastIp() + "'" +
+                        "email='" + authPlayer.getUser().getEmail() + "'" +
+                        ",last_ip='" + authPlayer.getLastIp() + "'" +
                         ",last_logged='" + authPlayer.getLastLogged() + "'" +
                         ",last_authorized='" + authPlayer.getLastAuthorized() + "'" +
                         "WHERE minecraft_username='" + minecraft_username+ "'";
@@ -144,9 +146,10 @@ public class AuthDatabase {
 
             }else{
 
-                String insertIntoRequest = "INSERT INTO AuthUsers (minecraft_username,discord_id,last_logged,last_authorized,last_ip,created_at) VALUES (" +
+                String insertIntoRequest = "INSERT INTO AuthUsers (minecraft_username,discord_id,email,last_logged,last_authorized,last_ip,created_at) VALUES (" +
                         "'" + minecraft_username + "'," +
                         "'" + authPlayer.getUser().getId() + "'," +
+                        "'" + authPlayer.getUser().getEmail() + "'," +
                         "'" + authPlayer.getLastLogged() +"'," +
                         "'" + authPlayer.getLastAuthorized() + "'," +
                         "'" + authPlayer.getLastIp() + "'," +
@@ -204,6 +207,7 @@ public class AuthDatabase {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "minecraft_username TEXT NOT NULL UNIQUE," +
                 "discord_id TEXT NOT NULL UNIQUE," +
+                "email TEXT," +
                 "created_at BIGINT," +
                 "last_logged BIGINT," +
                 "last_authorized BIGINT," +

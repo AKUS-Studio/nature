@@ -36,8 +36,9 @@ public class DiscordAPI {
         String userId = (String) userObject.get("id");
         String username = (String) userObject.get("username");
         String discriminator = (String) userObject.get("discriminator");
+        String email = (String) userObject.get("email");
 
-        return new DiscordUser(userId, username, discriminator, info);
+        return new DiscordUser(userId, username, discriminator, email, info);
     }
 
     public static DiscordUser getDiscordUserByCode(String auth_code){

@@ -2,21 +2,18 @@ package works.akus.auth.auth.discord;
 
 public class DiscordUser {
 
-    public DiscordUser(String id, String name, String discriminator, TokenInfo info) {
+    public DiscordUser(String id, String name, String discriminator, String email, TokenInfo info) {
         this.id = id;
         this.name = name;
         this.discriminator = discriminator;
+        this.email = email;
         this.tokenInfo = info;
     }
 
     String id;
     String name;
     String discriminator;
-
-    public void updateName(String name, String discriminator){
-        this.name = name;
-        this.discriminator = discriminator;
-    }
+    String email;
 
     TokenInfo tokenInfo;
 
@@ -30,6 +27,10 @@ public class DiscordUser {
 
     public String getDiscriminator() {
         return discriminator;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public TokenInfo getTokenInfo() {
