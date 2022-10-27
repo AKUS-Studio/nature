@@ -15,7 +15,7 @@ public class Mauris extends JavaPlugin {
 
 	private static Mauris instance;
 
-	// Registries
+	// Managers
 	private CommandManager commandManager;
 	private ResourcePackManager resourcePackUpdater;
 
