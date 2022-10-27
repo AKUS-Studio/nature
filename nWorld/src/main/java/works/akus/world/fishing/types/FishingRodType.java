@@ -2,7 +2,7 @@ package works.akus.world.fishing.types;
 
 public enum FishingRodType {
 
-	STANDART_FISHING_ROD(0, "Удочка"), 
+	STANDARD_FISHING_ROD(0, "Удочка"), 
 	BAMBOO_FISHING_ROD(1, "Бамбуковая удочка");
 
 	private int customModelData;

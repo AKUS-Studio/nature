@@ -24,7 +24,7 @@ public class FishingManager {
 	private void registerItems() {
 		// Register fishing rods
 		ItemRegistry.register("bamboo_fishing_rod", new CustomFishingRod(FishingRodType.BAMBOO_FISHING_ROD));
-		ItemRegistry.register("standart_fishing_rod", new CustomFishingRod(FishingRodType.STANDART_FISHING_ROD));
+		ItemRegistry.register("standard_fishing_rod", new CustomFishingRod(FishingRodType.STANDARD_FISHING_ROD));
 		
 		// Register fishes
 		ItemRegistry.register("cod", new CustomFish(CustomFishType.COD));
