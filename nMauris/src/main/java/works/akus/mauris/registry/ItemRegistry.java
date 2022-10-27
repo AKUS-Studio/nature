@@ -32,6 +32,12 @@ public  class ItemRegistry {
 		return getMaurisItem(id);
 	}
 	
+	public static @Nullable ItemStackBuilder getItemStackBuilder(String maurisItemId) {
+		MaurisItem item = getMaurisItem(maurisItemId);
+		if (item == null) return null;
+		return item.getBuilder();
+	}
+	
 	public static boolean isRegistered(String maurisItemId) {
 		return (getMaurisItem(maurisItemId) != null);
 	}

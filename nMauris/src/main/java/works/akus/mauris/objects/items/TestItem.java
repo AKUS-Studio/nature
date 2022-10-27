@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 
 public class TestItem extends MaurisItem {
 
@@ -33,19 +34,17 @@ public class TestItem extends MaurisItem {
 
     //Deleting block
     @Override
-    public void onInteract(PlayerInteractEvent e) {
+    public void onInteract(MaurisItem maurisItem, ItemStack item, PlayerInteractEvent e) {
         if(e.getClickedBlock() == null) return;
         e.getClickedBlock().setType(Material.AIR);
         e.getPlayer().getWorld().playSound(e.getPlayer(), Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
-
-        super.onInteract(e);
     }
 
     //Particles And Sound
     HashMap<Player, Long> itemsHoldingCooldown = new HashMap<>();
     int cooldown = 5;
     @Override
-    public void onStartHolding(PlayerItemHeldEvent e) {
+    public void onStartHolding(MaurisItem maurisItem, ItemStack item, PlayerItemHeldEvent e) {
         Location l = e.getPlayer().getLocation();
 
         //Cooldown Particles
@@ -61,16 +60,11 @@ public class TestItem extends MaurisItem {
 
         // Sound
         l.getWorld().playSound(e.getPlayer(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 1, 1);
-
-
-        super.onStartHolding(e);
     }
 
     @Override
-    public void onEndHolding(PlayerItemHeldEvent e) {
+    public void onEndHolding(MaurisItem maurisItem, ItemStack item, PlayerItemHeldEvent e) {
         Location l = e.getPlayer().getLocation();
         l.getWorld().playSound(e.getPlayer(), Sound.BLOCK_AMETHYST_CLUSTER_BREAK, 1, 1);
-
-        super.onEndHolding(e);
     }
 }

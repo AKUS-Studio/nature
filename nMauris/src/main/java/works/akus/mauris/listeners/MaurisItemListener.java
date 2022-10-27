@@ -23,7 +23,7 @@ public class MaurisItemListener implements Listener {
         MaurisItem maurisItem = ItemRegistry.getMaurisItem(item);
         if(maurisItem == null) return;
 
-        maurisItem.onInteract(e);
+        maurisItem.onInteract(maurisItem, item, e);
     }
 
     @EventHandler
@@ -32,7 +32,7 @@ public class MaurisItemListener implements Listener {
         MaurisItem maurisItem = ItemRegistry.getMaurisItem(item);
         if(maurisItem == null) return;
 
-        maurisItem.onInteractAtEntity(e);
+        maurisItem.onInteractAtEntity(maurisItem, item, e);
     }
 
     @EventHandler
@@ -41,7 +41,7 @@ public class MaurisItemListener implements Listener {
         MaurisItem maurisItem = ItemRegistry.getMaurisItem(item);
         if(maurisItem == null) return;
 
-        maurisItem.onDrop(e);
+        maurisItem.onDrop(maurisItem, item, e);
     }
 
     @EventHandler
@@ -50,7 +50,7 @@ public class MaurisItemListener implements Listener {
         MaurisItem maurisItem = ItemRegistry.getMaurisItem(item);
         if(maurisItem == null) return;
 
-        maurisItem.onSpawn(e);
+        maurisItem.onSpawn(maurisItem, item, e);
     }
 
     @EventHandler
@@ -59,7 +59,7 @@ public class MaurisItemListener implements Listener {
         MaurisItem maurisItem = ItemRegistry.getMaurisItem(item);
         if(maurisItem == null) return;
 
-        maurisItem.onInventoryClick(e);
+        maurisItem.onInventoryClick(maurisItem, item, e);
     }
 
     @EventHandler
@@ -68,7 +68,7 @@ public class MaurisItemListener implements Listener {
         MaurisItem maurisItem = ItemRegistry.getMaurisItem(item);
         if(maurisItem == null) return;
 
-        maurisItem.onPickup(e);
+        maurisItem.onPickup(maurisItem, item, e);
     }
 
     @EventHandler
@@ -77,7 +77,7 @@ public class MaurisItemListener implements Listener {
         MaurisItem maurisItem = ItemRegistry.getMaurisItem(item);
         if(maurisItem == null) return;
 
-        maurisItem.onStartHolding(e);
+        maurisItem.onStartHolding(maurisItem, item, e);
     }
 
     @EventHandler
@@ -86,7 +86,7 @@ public class MaurisItemListener implements Listener {
         MaurisItem maurisItem = ItemRegistry.getMaurisItem(item);
         if(maurisItem == null) return;
 
-        maurisItem.onEndHolding(e);
+        maurisItem.onEndHolding(maurisItem, item, e);
     }
 
 
