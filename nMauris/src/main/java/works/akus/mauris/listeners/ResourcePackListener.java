@@ -48,7 +48,7 @@ public class ResourcePackListener implements Listener {
             case SUCCESSFULLY_LOADED: {
                 p.sendMessage(SUCCESSFULLY_LOADED_MESSAGE);
 
-                ResourcePackCompleteEvent resourcePackCompleteEvent = new ResourcePackCompleteEvent(p, status, manager);
+                ResourcePackCompleteEvent resourcePackCompleteEvent = new ResourcePackCompleteEvent(p, manager);
                 Bukkit.getPluginManager().callEvent(resourcePackCompleteEvent);
                 break;
             }
