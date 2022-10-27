@@ -3,4 +3,7 @@ description: nAuth
 version: ${project.version}
 main: works.akus.auth.Auth
 api-version: 1.19
-
+commands:
+  resetauth:
+    description: Deletes your linked discord account
+    usage: /resetauth

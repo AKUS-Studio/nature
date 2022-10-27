@@ -94,11 +94,10 @@ public class AuthManager implements Listener {
             }
         }.runTask(Auth.getInstance());
 
-
         String ip = p.getAddress().getAddress().getHostAddress();
 
         //Checking Database
-        AuthPlayer authDatabasePlayer = authDatabase.loadAuthPlayer(p);
+        AuthPlayer authDatabasePlayer = authDatabase.loadAuthPlayer(p.getName());
         String stored_discord_id = null;
         Long stored_created_at = null;
 
@@ -120,10 +119,7 @@ public class AuthManager implements Listener {
                 authDatabasePlayer.setLastLogged(timestamp);
                 authDatabase.saveAuthPlayer(authDatabasePlayer);
 
-                cancelAuthPlayer(p);
-
-                clearChat(p);
-                p.sendMessage(getSuccessAuthMessage(user));
+                authorize(p, authDatabasePlayer);
                 return;
             }
         }
@@ -155,14 +151,20 @@ public class AuthManager implements Listener {
             authDatabase.saveAuthPlayer(au);
             authDatabase.saveToken(du.getId(), du.getTokenInfo());
 
-            cancelAuthPlayer(p);
-
-            clearChat(p);
-            p.sendMessage(getSuccessAuthMessage(du));
-
-            authorizedPlayers.put(p, au);
+            authorize(p, au);
         });
 
+    }
+
+    private void authorize(Player p, AuthPlayer ap){
+        ap.setAuthorized(p);
+
+        clearChat(p);
+        p.sendMessage(getSuccessAuthMessage(ap.getUser()));
+
+        authorizedPlayers.put(p, ap);
+
+        cancelAuthPlayer(p);
     }
 
     public void cancelAuthPlayer(Player p){
@@ -172,8 +174,40 @@ public class AuthManager implements Listener {
         playersInAuth.remove(p);
     }
 
+    public boolean isPlayerAuth(String playerName){
+        Player p = Bukkit.getPlayer(playerName);
+
+        AuthPlayer authplayer = authorizedPlayers.get(p);
+        if(authplayer != null) return true;
+
+        return authDatabase.isAuthPlayerExists(playerName);
+    }
+
+    public AuthPlayer getAuthPlayer(String playerName){
+        Player p = Bukkit.getPlayer(playerName);
+
+        AuthPlayer authplayer = authorizedPlayers.get(p);
+        if(authplayer != null) return authplayer;
+
+        authplayer = authDatabase.loadAuthPlayer(playerName);
+        return authplayer;
+    }
+
     public AuthPlayer getAuthPlayer(Player player){
-        return authorizedPlayers.get(player);
+        return getAuthPlayer(player.getName());
+    }
+
+
+    public boolean deleteAuthPlayer(String playerName){
+        AuthPlayer pl = getAuthPlayer(playerName);
+        if(pl == null) return false;
+
+        if(pl.isAuthorized){
+            pl.getPlayer().kick(Component.text("Ваш дискорд аккаунт был отвязан. Пожалуйста, войдите снова, чтобы авторизовать свой новый дискорд аккаунт"));
+        }
+
+        authDatabase.removeAuthPlayer(pl);
+        return true;
     }
 
     //Spamming Authentication message

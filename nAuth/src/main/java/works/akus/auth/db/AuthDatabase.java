@@ -74,8 +74,21 @@ public class AuthDatabase {
         return null;
     }
 
-    public AuthPlayer loadAuthPlayer(Player player){
-        String minecraft_username = player.getName();
+    public boolean isAuthPlayerExists(String minecraft_username){
+        try(Connection con = dataSource.getConnection()){
+            // AuthUsers
+            String selectRequest = "SELECT * FROM AuthUsers WHERE minecraft_username='" + minecraft_username +"'";
+
+            ResultSet set = con.prepareStatement(selectRequest).executeQuery();
+            return set.next();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    public AuthPlayer loadAuthPlayer(String minecraft_username){
         try(Connection con = dataSource.getConnection()){
 
             // AuthUsers
@@ -112,7 +125,7 @@ public class AuthDatabase {
             );
 
             DiscordUser user = new DiscordUser(discord_id, null, null, email, ti);
-            AuthPlayer au = new AuthPlayer(user, player, last_ip, last_logged, last_authorized, created_at);
+            AuthPlayer au = new AuthPlayer(user, minecraft_username, last_ip, last_logged, last_authorized, created_at);
 
             return au;
 
@@ -123,10 +136,26 @@ public class AuthDatabase {
         return null;
     }
 
+    public void removeAuthPlayer(AuthPlayer authPlayer){
+
+        try(Connection con = dataSource.getConnection()){
+
+            String deleteAuthUsers = "DELETE FROM AuthUsers WHERE minecraft_username='" + authPlayer.getName() + "'";
+            String deleteToken = "DELETE FROM TokenInfo WHERE discord_id='" + authPlayer.getUser().getId() + "'";
+
+            con.prepareStatement(deleteAuthUsers).execute();
+            con.prepareStatement(deleteToken).execute();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
     public void saveAuthPlayer(AuthPlayer authPlayer){
 
         //TODO
-        String minecraft_username = authPlayer.getPlayer().getName();
+        String minecraft_username = authPlayer.getName();
 
         boolean exists = false;
         try(Connection con = dataSource.getConnection()){
