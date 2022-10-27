@@ -8,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import works.akus.mauris.commands.CommandManager;
 import works.akus.mauris.listeners.MaurisItemListener;
 import works.akus.mauris.registry.Defaults;
-import works.akus.mauris.registry.ItemRegistry;
 import works.akus.mauris.resourcepack.ResourcePackManager;
 
 public class Mauris extends JavaPlugin {
@@ -16,8 +15,6 @@ public class Mauris extends JavaPlugin {
 	private static Mauris instance;
 
 	// Registries
-	private ItemRegistry itemRegistry;
-
 	private CommandManager commandManager;
 	private ResourcePackManager resourcePackUpdater;
 
@@ -26,8 +23,6 @@ public class Mauris extends JavaPlugin {
 		createConfig();
 
 		// Registries
-		itemRegistry = new ItemRegistry();
-		
 		Defaults.registerDefaults();
 		
 		// Managers
@@ -71,10 +66,6 @@ public class Mauris extends JavaPlugin {
 			getConfig().options().copyDefaults(true);
 			saveDefaultConfig();
 		}
-	}
-
-	public ItemRegistry getItemRegistry() {
-		return itemRegistry;
 	}
 
 	public static Mauris getInstance() {
