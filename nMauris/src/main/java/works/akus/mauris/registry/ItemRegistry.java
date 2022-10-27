@@ -20,6 +20,7 @@ public  class ItemRegistry {
 
 	private static final String MAURIS_KEY = "maurisid";
 	private static ConcurrentHashMap<String, MaurisItem> registeredItems = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<MaurisItem, String> registeredItemsReversed = new ConcurrentHashMap<>();
 
 	public static @Nullable MaurisItem getMaurisItem(String id) {
 		return registeredItems.getOrDefault(id, null);
@@ -31,11 +32,9 @@ public  class ItemRegistry {
 
 		return getMaurisItem(id);
 	}
-	
-	public static @Nullable ItemStackBuilder getItemStackBuilder(String maurisItemId) {
-		MaurisItem item = getMaurisItem(maurisItemId);
-		if (item == null) return null;
-		return item.getBuilder();
+
+	public static String getMaurisId(MaurisItem item) {
+		return registeredItemsReversed.get(item);
 	}
 	
 	public static boolean isRegistered(String maurisItemId) {
@@ -43,10 +42,12 @@ public  class ItemRegistry {
 	}
 
 	public static void register(String id, MaurisItem item) {
+		registeredItemsReversed.put(item, id);
 		registeredItems.put(id, item);
 	}
 	
 	public static void unregister(String id) {
+		registeredItemsReversed.remove(registeredItems.get(id));
 		registeredItems.remove(id);
 	}
 	
@@ -66,16 +67,33 @@ public  class ItemRegistry {
 		
 		return pdc.get(key, PersistentDataType.STRING);
 	}
-	
+
+	public static @Nullable ItemStackBuilder getItemStackBuilder(String maurisItemId) {
+		MaurisItem item = getMaurisItem(maurisItemId);
+		if (item == null)
+			return null;
+
+		ItemStackBuilder builder = new ItemStackBuilder();
+		setMaurisId(builder, maurisItemId);
+
+		return builder;
+	}
+
 	public static @Nullable ItemStack getItemStack(String maurisItemId) {
 		if (!isRegistered(maurisItemId)) return null;
 
 		MaurisItem item = getMaurisItem(maurisItemId);
 
-		ItemStackBuilder builder = item.getBuilder();
-		builder.addStringKeysData(MAURIS_KEY, maurisItemId);
+		ItemStackBuilder builder = new ItemStackBuilder();
+		setMaurisId(builder, maurisItemId);
 
+		item.supplyBuilder(builder);
+		
 		return builder.createItemStack();
+	}
+	
+	private static void setMaurisId(ItemStackBuilder builder, String maurisId) {
+		builder.addStringKeysData(MAURIS_KEY, maurisId);
 	}
 	
 }

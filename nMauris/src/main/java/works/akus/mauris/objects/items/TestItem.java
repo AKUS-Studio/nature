@@ -16,8 +16,7 @@ import org.bukkit.inventory.ItemStack;
 public class TestItem extends MaurisItem {
 
     @Override
-    public ItemStackBuilder getBuilder() {
-        ItemStackBuilder builder = new ItemStackBuilder();
+    public void supplyBuilder(ItemStackBuilder builder) {
         builder
                 .setMaterial(Material.STICK)
                 .setCustomModelData(3)
@@ -25,12 +24,7 @@ public class TestItem extends MaurisItem {
                 .addEnchant(Enchantment.KNOCKBACK, 10)
                 .addLore("#36454fEverybody needs a little something")
                 .addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-        return builder;
     }
-
-    //Testing Things
-
 
     //Deleting block
     @Override

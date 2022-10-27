@@ -9,10 +9,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 
+import works.akus.mauris.registry.ItemRegistry;
+
 public abstract class MaurisItem  {
 
-    public abstract ItemStackBuilder getBuilder();
-
+    public abstract void supplyBuilder(ItemStackBuilder builder);
+    
+    public final ItemStackBuilder getBuilder() {
+    	final String maurisId = ItemRegistry.getMaurisId(this);
+    	return ItemRegistry.getItemStackBuilder(maurisId);
+    }
+    
     public void onInteract(MaurisItem maurisItem, ItemStack item, PlayerInteractEvent e) {}
 
     public void onInteractAtEntity(MaurisItem maurisItem, ItemStack item, PlayerInteractAtEntityEvent e) { }
