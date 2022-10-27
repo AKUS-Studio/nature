@@ -7,17 +7,10 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.inventory.ItemStack;
 
-import works.akus.mauris.objects.MaurisObject;
-
-public abstract class MaurisItem extends MaurisObject {
+public abstract class MaurisItem  {
 
     public abstract ItemStackBuilder getBuilder();
-
-    public ItemStack getItemStack(){
-        return getBuilder().addStringKeysData("maurisid", getId()).createItemStack();
-    }
 
     public void onInteract(PlayerInteractEvent e) {}
 

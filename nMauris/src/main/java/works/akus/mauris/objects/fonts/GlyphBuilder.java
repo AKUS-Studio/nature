@@ -3,6 +3,7 @@ package works.akus.mauris.objects.fonts;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import works.akus.mauris.registry.GlyphRegistry;
 
 public class GlyphBuilder {
 
@@ -38,7 +39,7 @@ public class GlyphBuilder {
 	}
 
 	public GlyphBuilder offset(int pixels) {
-		return append(Fonts.getOffset(pixels));
+		return append(GlyphRegistry.getOffset(pixels));
 	}
 
 	public GlyphBuilder leftShift(int pixels) {

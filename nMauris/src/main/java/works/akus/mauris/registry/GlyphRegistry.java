@@ -1,4 +1,4 @@
-package works.akus.mauris.objects.fonts;
+package works.akus.mauris.registry;
 
 import java.util.Map;
 
@@ -7,8 +7,9 @@ import com.google.common.collect.Maps;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import works.akus.mauris.objects.fonts.Glyph;
 
-public class Fonts {
+public class GlyphRegistry {
 
 	private static Map<String, Glyph> GLYPH_MAP = Maps.newHashMap();
 	private static Map<Character, Glyph> GLYPH_MAP_REVERSED = Maps.newHashMap();

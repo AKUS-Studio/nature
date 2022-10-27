@@ -2,32 +2,40 @@ package works.akus.mauris;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import works.akus.mauris.commands.CommandManager;
-import works.akus.mauris.objects.MaurisObjectManager;
+import works.akus.mauris.listeners.MaurisItemListener;
+import works.akus.mauris.registry.Defaults;
+import works.akus.mauris.registry.ItemRegistry;
 import works.akus.mauris.resourcepack.ResourcePackManager;
 
 public class Mauris extends JavaPlugin {
 
-	static Mauris instance;
+	private static Mauris instance;
 
-	MaurisObjectManager thingManager;
-	CommandManager commandManager;
+	// Registries
+	private ItemRegistry itemRegistry;
 
-	ResourcePackManager resourcePackUpdater;
+	private CommandManager commandManager;
+	private ResourcePackManager resourcePackUpdater;
 
 	public void onEnable() {
 		instance = this;
 		createConfig();
 
-		// Managers Setup
-		thingManager = new MaurisObjectManager();
-		thingManager.setUp();
-
+		// Registries
+		itemRegistry = new ItemRegistry();
+		
+		Defaults.registerDefaults();
+		
+		// Managers
 		commandManager = new CommandManager();
 		commandManager.setUp();
-		//
+
+		// Listeners
+		registerListeners();
 
 		if (isGithubTokenSet()) {
 			resourcePackUpdater = new ResourcePackManager();
@@ -46,6 +54,10 @@ public class Mauris extends JavaPlugin {
 		}
 	}
 
+	private void registerListeners() {
+		Bukkit.getPluginManager().registerEvents(new MaurisItemListener(), Mauris.getInstance());
+	}
+
 	private boolean isGithubTokenSet() {
 		final String path = "resource-pack-updater.github-token";
 		if (!this.getConfig().isSet(path))
@@ -61,8 +73,8 @@ public class Mauris extends JavaPlugin {
 		}
 	}
 
-	public MaurisObjectManager getThingManager() {
-		return thingManager;
+	public ItemRegistry getItemRegistry() {
+		return itemRegistry;
 	}
 
 	public static Mauris getInstance() {

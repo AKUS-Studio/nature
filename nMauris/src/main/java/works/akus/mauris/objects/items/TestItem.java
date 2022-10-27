@@ -1,18 +1,16 @@
 package works.akus.mauris.objects.items;
 
+import java.util.HashMap;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemFlag;
-
-import java.util.HashMap;
 
 public class TestItem extends MaurisItem {
 
@@ -28,11 +26,6 @@ public class TestItem extends MaurisItem {
                 .addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         return builder;
-    }
-
-    @Override
-    public String getId() {
-        return "example";
     }
 
     //Testing Things

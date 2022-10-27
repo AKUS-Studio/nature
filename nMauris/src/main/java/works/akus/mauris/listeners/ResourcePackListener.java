@@ -1,4 +1,4 @@
-package works.akus.mauris.resourcepack.listeners;
+package works.akus.mauris.listeners;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;

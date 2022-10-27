@@ -2,12 +2,10 @@ package works.akus.mauris.resourcepack;
 
 import java.io.File;
 
-import org.bukkit.Bukkit;
 import works.akus.mauris.Mauris;
 import works.akus.mauris.resourcepack.github.GitHubAPI;
 import works.akus.mauris.resourcepack.github.GitRepository;
 import works.akus.mauris.resourcepack.hosting.FileHostServer;
-import works.akus.mauris.resourcepack.listeners.ResourcePackListener;
 import works.akus.mauris.utils.HashCalculator;
 import works.akus.mauris.utils.files.MaurisDataConfig;
 
@@ -29,7 +27,6 @@ public class ResourcePackManager {
 	private FileHostServer server;
 	private String resourcepackUrl;
 
-	private ResourcePackListener packListener;
 	
 	public ResourcePackManager() {
 		this.mauris = Mauris.getInstance();
@@ -40,11 +37,6 @@ public class ResourcePackManager {
 	public void setup() {
 		checkAndUpdate();
 		hostResourcePack();
-
-		if(packListener == null){
-			packListener = new ResourcePackListener(this);
-			Bukkit.getPluginManager().registerEvents(packListener, mauris);
-		}
 	}
 
 	public void stopServer() {

@@ -1,16 +1,16 @@
 package works.akus.mauris.commands;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import works.akus.mauris.utils.ColorUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import works.akus.mauris.utils.ColorUtils;
 
 public class CommandManager implements TabExecutor {
 
