@@ -8,3 +8,4 @@ target/
 # Intellij Things
 *.iml
 .idea/
+.paper-nms/mappings_1.19.2.tiny
