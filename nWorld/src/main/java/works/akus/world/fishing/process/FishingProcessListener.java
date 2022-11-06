@@ -46,7 +46,7 @@ public class FishingProcessListener implements Listener {
 		Player player = event.getPlayer();
 		
 		ItemStack fish = ItemRegistry.getItemStack("cod");
-		World.get().getFishingManager().getFishingProcessesHandler().getFishingProcess(player).hookFish(fish, 0.2, 1);
+		World.get().getFishingManager().getFishingProcessesHandler().getFishingProcess(player).hookFish(fish, 0.2, 5);
 	}
 	@EventHandler
 	public void onShiftingWhileFishing(PlayerToggleSneakEvent event) {

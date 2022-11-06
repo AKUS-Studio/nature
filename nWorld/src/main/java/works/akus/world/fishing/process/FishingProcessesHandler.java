@@ -46,7 +46,7 @@ public class FishingProcessesHandler{
 		taskId = scheduler.scheduleSyncRepeatingTask(plugin, fishingSimulateTask, 0, 1);
 	}
 	
-	public void cancelfishingSimulateTask() {
+	public void cancelFishingSimulateTask() {
 		BukkitScheduler scheduler = plugin.getServer().getScheduler();
 		scheduler.cancelTask(taskId);
 	}
@@ -55,7 +55,9 @@ public class FishingProcessesHandler{
 		fishingSimulateTask = new Runnable() {
 			@Override
 			public void run() {
-				activeFishingProcesses.values().forEach(fishingProcess -> fishingProcess.fishingLogic());
+				for(FishingProcess fishingProcess : activeFishingProcesses.values()) {
+					fishingProcess.fishingLogic();
+				}
 			}
 		};
 	}

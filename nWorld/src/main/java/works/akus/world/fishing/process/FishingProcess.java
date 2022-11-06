@@ -1,36 +1,44 @@
 package works.akus.world.fishing.process;
 
+import java.time.Duration;
+
 import org.bukkit.Location;
 import org.bukkit.entity.FishHook;
+import org.bukkit.entity.FishHook.HookState;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.Title.Times;
+import net.md_5.bungee.api.chat.TextComponent;
+import works.akus.mauris.objects.fonts.Glyph;
+import works.akus.mauris.objects.fonts.GlyphBuilder;
+import works.akus.mauris.registry.GlyphRegistry;
 import works.akus.world.World;
-import works.akus.world.fishing.items.CustomFishingRod;
 
 public class FishingProcess {
-	
+
 	private Player player;
 	private FishHook hook;
-	private CustomFishingRod fishingRod;
+	private ItemStack fishingRod;
 
 	private boolean isReelingInTheLine;
 	private boolean isCoilFixed;
 
 	private double fishingLineLength;
+	private double fishingLineTension;
+	private double maxFishingLineTension = 10; // temporary value
 
 	private ItemStack fish;
 	private double fishStrength;
 	private double fishMass;
 	private boolean isFishHooked;
 	private Vector fishVelocity;
-	
-	private final int FREQUENCY_OF_CHANGIN_THE_DIRECTION_OF_FISH = 5; // in ticks
-	
 
-	private Runnable fishingSimulateTask;
-	private int taskId;
+	private final int FREQUENCY_OF_CHANGIN_THE_DIRECTION_OF_FISH = 5; // in ticks
 
 	private int ticksCounter;
 
@@ -46,7 +54,19 @@ public class FishingProcess {
 	}
 
 	protected void fishingLogic() {
+		if (hook.isDead())
+			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
+
 		ticksCounter += 1;
+		if (isFishHooked) {
+			if (ticksCounter % FREQUENCY_OF_CHANGIN_THE_DIRECTION_OF_FISH == 0)
+				fishingLineTension = getNewFishingLineTension();
+			fishingLineTension = 0;
+		}
+		if (fishingLineTension > maxFishingLineTension) {
+			hook.remove();
+			player.sendMessage("Рыба сорвалась");
+		}
 
 		Location hookLocation = hook.getLocation();
 		Location playerLocation = player.getLocation();
@@ -59,38 +79,67 @@ public class FishingProcess {
 		Vector vectorBetweenPlayerAndHookInXZPlane = new Vector(playerLocation.getX() - hookLocation.getX(), 0,
 				playerLocation.getZ() - hookLocation.getZ());
 
-		if(vectorBetweenPlayerAndHookInXZPlane.length() < 1 && isReelingInTheLine) {
+		if (vectorBetweenPlayerAndHookInXZPlane.length() < 1 && isReelingInTheLine) {
 			hook.remove();
 			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
-			player.getInventory().addItem(fish);
+			if (isFishHooked)
+				player.getInventory().addItem(fish);
 		}
+
 		Vector hookVelocity = getNewHookVelocity(vectorBetweenPlayerAndHookInXZPlane);
 		hook.setVelocity(hookVelocity);
+	}
+
+	private void printFishingLineTension(double tension) {
+		int tensionLineCoordinate = (int) Math.round((37/maxFishingLineTension)*tension);
+		
+		player.sendActionBar(new GlyphBuilder().offset(tensionLineCoordinate).offset(-40).append(GlyphRegistry.getGlyph("tension_bar")).offset(tensionLineCoordinate).offset(-40).append(GlyphRegistry.getGlyph("tension_line")).buildAsComponent());
+		//player.showTitle(Title.title(Component.text(""), new GlyphBuilder().append(GlyphRegistry.getGlyph("tension_bar")).offset(tensionLineCoordinate).append(GlyphRegistry.getGlyph("tension_line")).buildAsComponent(), Times.times(Duration.ZERO, Duration.ofMillis(1000), Duration.ZERO)));
+	}
+
+	private double getNewFishingLineTension() {
+		double tension = 0;
+
+		if (Math.random() > 0.20 && fishStrength < (fishMass / 5))
+			fishStrength += Math.random() * (fishMass / 10);
+		else if (fishStrength > fishMass / 10)
+			fishStrength -= Math.random() * (fishMass / 10);
+
+		if(isCoilFixed || isReelingInTheLine) 
+			tension += fishStrength;
+
+		if (isReelingInTheLine) {
+			tension += fishMass;
+		}
+
+		printFishingLineTension(tension);
+		return tension;
 	}
 
 	private Vector getNewHookVelocity(Vector vectorBetweenPlayerAndHookInXZPlane) {
 		Vector hookVelocity = new Vector(0, 0, 0);
 
-		if (isFishHooked) {
-			if (ticksCounter % FREQUENCY_OF_CHANGIN_THE_DIRECTION_OF_FISH == 0 || fishVelocity.length() == 0)
+		if (isFishHooked && hook.getState() == HookState.BOBBING) {
+			if ((ticksCounter % FREQUENCY_OF_CHANGIN_THE_DIRECTION_OF_FISH == 0 || fishVelocity.length() == 0)
+					&& hook.getState() == HookState.BOBBING)
 				fishVelocity = getNewFishVelocity(vectorBetweenPlayerAndHookInXZPlane);
 			hookVelocity = fishVelocity.clone();
 		}
 
 		if (isReelingInTheLine) {
 			Vector velocityFromCoil = vectorBetweenPlayerAndHookInXZPlane.clone().normalize().multiply(0.3);
-			if(vectorBetweenPlayerAndHookInXZPlane.length() < 2) 
+			if (vectorBetweenPlayerAndHookInXZPlane.length() < 2)
 				velocityFromCoil.setY(0.25);
 			hookVelocity.add(velocityFromCoil);
-			
+
 		}
-		
+
 		if (isCoilFixed && hookVelocity.dot(vectorBetweenPlayerAndHookInXZPlane) < 0) {
 			Vector perpendicularVector = getPerpendicularVectorInXZPlane(vectorBetweenPlayerAndHookInXZPlane);
 			hookVelocity = vectorizedProjectionOfAVector1OntoAVector2(hookVelocity, perpendicularVector).clone();
 
 		}
-		
+
 		if (!isReelingInTheLine && !isFishHooked) {
 			hookVelocity = hook.getVelocity();
 		}
@@ -119,7 +168,7 @@ public class FishingProcess {
 		double sinBetaPlusAlpha = sinAlpha * cosBeta + cosAlpha * sinBeta;
 		Vector fishVelocity = new Vector(cosBetaPlusAlpha, 0, sinBetaPlusAlpha);
 
-		fishVelocity.multiply(fishStrength);
+		fishVelocity.multiply(0.2);
 
 		return fishVelocity;
 
@@ -137,7 +186,7 @@ public class FishingProcess {
 		this.fish = fish;
 		this.fishStrength = fishStrength;
 		this.fishMass = fishMass;
-		
+
 		isFishHooked = true;
 	}
 
@@ -148,7 +197,7 @@ public class FishingProcess {
 	public boolean isReelingInTheLine() {
 		return isReelingInTheLine;
 	}
-	
+
 	public boolean isCoilFixed() {
 		return isCoilFixed;
 	}

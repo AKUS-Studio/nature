@@ -2,6 +2,9 @@ package works.akus.world.fishing;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import works.akus.mauris.objects.fonts.Glyph;
+import works.akus.mauris.objects.fonts.GlyphBuilder;
+import works.akus.mauris.registry.GlyphRegistry;
 import works.akus.mauris.registry.ItemRegistry;
 import works.akus.world.fishing.items.CustomFish;
 import works.akus.world.fishing.items.CustomFishingRod;
@@ -19,6 +22,7 @@ public class FishingManager {
 		plugin.getServer().getPluginManager().registerEvents(new FishingProcessListener(), plugin);
 		
 		registerItems();
+		regiserGlyphs();
 	}
 	
 	private void registerItems() {
@@ -29,6 +33,12 @@ public class FishingManager {
 		// Register fishes
 		ItemRegistry.register("cod", new CustomFish(CustomFishType.COD));
 		ItemRegistry.register("bamboo_fish", new CustomFish(CustomFishType.BAMBOO_FISH));
+	}
+	
+	private void regiserGlyphs() {
+		// Register tension bar components
+		GlyphRegistry.registerGlyph(new Glyph("tension_bar", '\uE000', "fishing",39));
+		GlyphRegistry.registerGlyph(new Glyph("tension_line", '\uE001', "fishing",1));
 	}
 	
 	public FishingProcessesHandler getFishingProcessesHandler() {
