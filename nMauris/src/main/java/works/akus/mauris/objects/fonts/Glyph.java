@@ -46,11 +46,7 @@ public class Glyph {
 	}
 	
 	public TextComponent toTextComponent() {
-		TextComponent component = Component.text(unicode);
-		
-		if (!font.equals("default")) {
-			component.font(Key.key(font));
-		}
+		TextComponent component = font.equals("default") ? Component.text(unicode) : (TextComponent) Component.text(unicode).font(Key.key(font));
 		
 		return component;
 	}
