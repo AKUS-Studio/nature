@@ -1,7 +1,5 @@
 package works.akus.world.fishing.process;
 
-import java.time.Duration;
-
 import org.bukkit.Location;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.FishHook.HookState;
@@ -9,12 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.Title;
-import net.kyori.adventure.title.Title.Times;
-import net.md_5.bungee.api.chat.TextComponent;
-import works.akus.mauris.objects.fonts.Glyph;
 import works.akus.mauris.objects.fonts.GlyphBuilder;
 import works.akus.mauris.registry.GlyphRegistry;
 import works.akus.world.World;
@@ -91,10 +84,15 @@ public class FishingProcess {
 	}
 
 	private void printFishingLineTension(double tension) {
-		int tensionLineCoordinate = (int) Math.round((37/maxFishingLineTension)*tension);
+		int tensionLineCoordinate = (int) Math.round((37 / maxFishingLineTension) * tension);
+
+		Component component = new GlyphBuilder()
+				.offset(tensionLineCoordinate).offset(-40) // idk how but it fixed offset in action bar
+				.append(GlyphRegistry.getGlyph("tension_bar"))
+				.offset(tensionLineCoordinate).offset(-40)
+				.append(GlyphRegistry.getGlyph("tension_line")).buildAsComponent();
 		
-		player.sendActionBar(new GlyphBuilder().offset(tensionLineCoordinate).offset(-40).append(GlyphRegistry.getGlyph("tension_bar")).offset(tensionLineCoordinate).offset(-40).append(GlyphRegistry.getGlyph("tension_line")).buildAsComponent());
-		//player.showTitle(Title.title(Component.text(""), new GlyphBuilder().append(GlyphRegistry.getGlyph("tension_bar")).offset(tensionLineCoordinate).append(GlyphRegistry.getGlyph("tension_line")).buildAsComponent(), Times.times(Duration.ZERO, Duration.ofMillis(1000), Duration.ZERO)));
+		player.sendActionBar(component);
 	}
 
 	private double getNewFishingLineTension() {
@@ -105,7 +103,7 @@ public class FishingProcess {
 		else if (fishStrength > fishMass / 10)
 			fishStrength -= Math.random() * (fishMass / 10);
 
-		if(isCoilFixed || isReelingInTheLine) 
+		if (isCoilFixed || isReelingInTheLine)
 			tension += fishStrength;
 
 		if (isReelingInTheLine) {
@@ -119,7 +117,7 @@ public class FishingProcess {
 	private Vector getNewHookVelocity(Vector vectorBetweenPlayerAndHookInXZPlane) {
 		Vector hookVelocity = new Vector(0, 0, 0);
 
-		if (isFishHooked && hook.getState() == HookState.BOBBING) {
+		if (isFishHooked && hook.isInWater()) {
 			if ((ticksCounter % FREQUENCY_OF_CHANGIN_THE_DIRECTION_OF_FISH == 0 || fishVelocity.length() == 0)
 					&& hook.getState() == HookState.BOBBING)
 				fishVelocity = getNewFishVelocity(vectorBetweenPlayerAndHookInXZPlane);
