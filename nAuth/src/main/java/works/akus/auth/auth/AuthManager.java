@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.yaml.snakeyaml.tokens.Token;
 import works.akus.auth.Auth;
 import works.akus.auth.auth.discord.DiscordAPI;
 import works.akus.auth.auth.discord.DiscordUser;
@@ -34,7 +33,7 @@ public class AuthManager implements Listener {
     public final int hoursIpAuthorizationLast = 48;
 
     private void clearChat(Player p){
-        for(int i = 0 ; i < 10 ; i++){
+        for(int i = 0 ; i < 20 ; i++){
             p.sendMessage(" ");
         }
     }
@@ -130,14 +129,29 @@ public class AuthManager implements Listener {
         Long finalDBCreatedAt = stored_created_at;
         oAuth.addPending(p, (du) ->{
             if(finalDBDiscordId != null && !du.getId().equals(finalDBDiscordId)){
-                cancelAuthPlayer(p);
-                p.kick(Component.text("Ваш майнкрафт никнейм привязан к другому дискорд аккаунту"));
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        cancelAuthPlayer(p);
+                        p.kick(Component.text("Ваш майнкрафт никнейм привязан к другому дискорд аккаунту"));
+                    }
+                }.runTask(auth);
+
                 return;
             }
 
             String minecraftUsernameByDiscordId = authDatabase.getMinecraftUsername(du.getId());
             if(finalDBDiscordId == null && minecraftUsernameByDiscordId != null){
-                p.kick(Component.text("Ваш дискорд аккаунт уже зарегестрирован на другой майнкрафт аккаунт"));
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        cancelAuthPlayer(p);
+                        p.kick(Component.text("Ваш дискорд аккаунт уже зарегестрирован на другой майнкрафт аккаунт"));
+                    }
+                }.runTask(auth);
+
                 return;
             }
 
