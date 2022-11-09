@@ -17,68 +17,65 @@ import works.akus.mauris.resourcepack.ResourcePackManager;
 
 public class Mauris extends JavaPlugin {
 
+	private static final String TOKEN_NOT_SET = "GitHub token is not set, resource pack updater was not enabled.";
+	private static final String TOKEN_PATH = "resource-pack-updater.github-token";
+	private static final String CONFIG = "config.yml";
+
 	private static Mauris instance;
 
-	// Managers
-	private CommandManager commandManager;
-	private ResourcePackManager resourcePackUpdater;
 	private ContainerTitleHandler inventoryHandler;
-
+	private ResourcePackManager resourcePackUpdater;
 	private ProtocolManager protocolManager;
+	private CommandManager commandManager;
 
+	@Override
 	public void onEnable() {
 		instance = this;
-		createConfig();
 
-		// Registries
+		createConfig();
+		loadResourcePackManager();
+
 		Defaults.registerDefaults();
 
-		// Managers
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		inventoryHandler = new ContainerTitleHandler(protocolManager, instance);
 		
 		commandManager = new CommandManager();
-		commandManager.setUp();
+		commandManager.initialize();
 
-		loadResourcePackManager();
-
-		// Listeners
 		registerListeners();
 
 	}
 
 	@Override
 	public void onDisable() {
-		super.onDisable();
-
 		if (resourcePackUpdater != null) {
 			resourcePackUpdater.stopServer();
 		}
 	}
 
 	private void registerListeners() {
-		Bukkit.getPluginManager().registerEvents(new MaurisItemListener(), Mauris.getInstance());
-		Bukkit.getPluginManager().registerEvents(new ResourcePackListener(resourcePackUpdater), Mauris.getInstance());
+		Bukkit.getPluginManager().registerEvents(new MaurisItemListener(), instance);
+		Bukkit.getPluginManager().registerEvents(new ResourcePackListener(resourcePackUpdater), instance);
 	}
 
 	private void loadResourcePackManager() {
 		if (isGithubTokenSet()) {
 			resourcePackUpdater = new ResourcePackManager();
 			resourcePackUpdater.setup();
-		} else {
-			getLogger().warning("GitHub token is not set, resource pack updater was not enabled.");
+			return;
 		}
+
+		getLogger().warning(TOKEN_NOT_SET);
 	}
 
 	private boolean isGithubTokenSet() {
-		final String path = "resource-pack-updater.github-token";
-		if (!this.getConfig().isSet(path))
-			return false;
-		return !(this.getConfig().getString(path).isBlank());
+		final String path = TOKEN_PATH;
+		return (getConfig().isSet(path)) && !(getConfig().getString(path).isBlank());
 	}
 
 	private void createConfig() {
-		File config = new File(getDataFolder() + File.separator + "config.yml");
+		final File config = new File(getDataFolder() + File.separator + CONFIG);
 		if (!config.exists()) {
 			getConfig().options().copyDefaults(true);
 			saveDefaultConfig();
@@ -92,7 +89,7 @@ public class Mauris extends JavaPlugin {
 	public ProtocolManager getProtocolManager() {
 		return this.protocolManager;
 	}
-	
+
 	public ContainerTitleHandler getInventoryHandler() {
 		return inventoryHandler;
 	}
