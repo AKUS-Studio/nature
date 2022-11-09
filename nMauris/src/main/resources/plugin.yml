@@ -3,6 +3,8 @@ description: nMauris
 version: ${project.version}
 main: works.akus.mauris.Mauris
 
+depend: [ ProtocolLib ]
+
 commands:
   mauris:
     usage: /mauris
