@@ -11,9 +11,9 @@ import com.comphenix.protocol.ProtocolManager;
 import works.akus.mauris.commands.CommandManager;
 import works.akus.mauris.listeners.MaurisItemListener;
 import works.akus.mauris.listeners.ResourcePackListener;
+import works.akus.mauris.objects.menu.InventoryHandler;
 import works.akus.mauris.registry.Defaults;
 import works.akus.mauris.resourcepack.ResourcePackManager;
-import works.akus.mauris.utils.InventoryHandler;
 
 public class Mauris extends JavaPlugin {
 

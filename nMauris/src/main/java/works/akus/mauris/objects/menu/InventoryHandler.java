@@ -1,4 +1,4 @@
-package works.akus.mauris.utils;
+package works.akus.mauris.objects.menu;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +20,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import works.akus.mauris.Mauris;
+import works.akus.mauris.utils.OpenContainerData;
 
 public class InventoryHandler {
 
