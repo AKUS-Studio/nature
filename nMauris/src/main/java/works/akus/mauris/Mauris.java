@@ -5,11 +5,15 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
 import works.akus.mauris.commands.CommandManager;
 import works.akus.mauris.listeners.MaurisItemListener;
 import works.akus.mauris.listeners.ResourcePackListener;
 import works.akus.mauris.registry.Defaults;
 import works.akus.mauris.resourcepack.ResourcePackManager;
+import works.akus.mauris.utils.InventoryHandler;
 
 public class Mauris extends JavaPlugin {
 
@@ -18,6 +22,9 @@ public class Mauris extends JavaPlugin {
 	// Managers
 	private CommandManager commandManager;
 	private ResourcePackManager resourcePackUpdater;
+	private InventoryHandler inventoryHandler;
+
+	private ProtocolManager protocolManager;
 
 	public void onEnable() {
 		instance = this;
@@ -25,20 +32,19 @@ public class Mauris extends JavaPlugin {
 
 		// Registries
 		Defaults.registerDefaults();
-		
+
 		// Managers
+		protocolManager = ProtocolLibrary.getProtocolManager();
+		inventoryHandler = new InventoryHandler(protocolManager, instance);
+		
 		commandManager = new CommandManager();
 		commandManager.setUp();
 
-		if (isGithubTokenSet()) {
-			resourcePackUpdater = new ResourcePackManager();
-			resourcePackUpdater.setup();
-		} else {
-			getLogger().warning("GitHub token is not set, resource pack updater was not enabled.");
-		}
+		loadResourcePackManager();
 
 		// Listeners
 		registerListeners();
+
 	}
 
 	@Override
@@ -53,6 +59,15 @@ public class Mauris extends JavaPlugin {
 	private void registerListeners() {
 		Bukkit.getPluginManager().registerEvents(new MaurisItemListener(), Mauris.getInstance());
 		Bukkit.getPluginManager().registerEvents(new ResourcePackListener(resourcePackUpdater), Mauris.getInstance());
+	}
+
+	private void loadResourcePackManager() {
+		if (isGithubTokenSet()) {
+			resourcePackUpdater = new ResourcePackManager();
+			resourcePackUpdater.setup();
+		} else {
+			getLogger().warning("GitHub token is not set, resource pack updater was not enabled.");
+		}
 	}
 
 	private boolean isGithubTokenSet() {
@@ -72,5 +87,13 @@ public class Mauris extends JavaPlugin {
 
 	public static Mauris getInstance() {
 		return instance;
+	}
+
+	public ProtocolManager getProtocolManager() {
+		return this.protocolManager;
+	}
+	
+	public InventoryHandler getInventoryHandler() {
+		return inventoryHandler;
 	}
 }
