@@ -23,7 +23,7 @@ public class Mauris extends JavaPlugin {
 
 	private static Mauris instance;
 
-	private ContainerTitleHandler inventoryHandler;
+	private ContainerTitleHandler containerTitleHandler;
 	private ResourcePackManager resourcePackUpdater;
 	private ProtocolManager protocolManager;
 	private CommandManager commandManager;
@@ -38,7 +38,7 @@ public class Mauris extends JavaPlugin {
 		Defaults.registerDefaults();
 
 		protocolManager = ProtocolLibrary.getProtocolManager();
-		inventoryHandler = new ContainerTitleHandler(protocolManager, instance);
+		containerTitleHandler = new ContainerTitleHandler(protocolManager, instance);
 		
 		commandManager = new CommandManager();
 		commandManager.initialize();
@@ -90,7 +90,7 @@ public class Mauris extends JavaPlugin {
 		return this.protocolManager;
 	}
 
-	public ContainerTitleHandler getInventoryHandler() {
-		return inventoryHandler;
+	public ContainerTitleHandler getContainerTitleHandler() {
+		return containerTitleHandler;
 	}
 }

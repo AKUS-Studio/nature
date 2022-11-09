@@ -8,7 +8,7 @@ import works.akus.mauris.Mauris;
 public class InventoryUtils {
 
 	public static void setPlayerInventoryTitle(Player player, TextComponent newTitle) {
-		Mauris.getInstance().getInventoryHandler().setPlayerInventoryTitle(player, newTitle);
+		Mauris.getInstance().getContainerTitleHandler().setPlayerInventoryTitle(player, newTitle);
 	}
 
 }
