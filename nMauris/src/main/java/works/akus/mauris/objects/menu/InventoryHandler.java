@@ -19,7 +19,6 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import works.akus.mauris.Mauris;
 import works.akus.mauris.utils.OpenContainerData;
 
 public class InventoryHandler {
@@ -84,7 +83,7 @@ public class InventoryHandler {
 	
 	// -- Utility methods --
 	
-	private static void sendOpenScreenPacket(Player player, int windowId, Object windowType, TextComponent title) {
+	private void sendOpenScreenPacket(Player player, int windowId, Object windowType, TextComponent title) {
 		final String json = GsonComponentSerializer.gson().serialize(title);
 		final WrappedChatComponent wrappedComponent = WrappedChatComponent.fromJson(json);
 
@@ -94,7 +93,7 @@ public class InventoryHandler {
 		openScreen.getChatComponents().write(0, wrappedComponent);
 
 		try {
-			Mauris.getInstance().getProtocolManager().sendServerPacket(player, openScreen);
+			protocolManager.sendServerPacket(player, openScreen);
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
