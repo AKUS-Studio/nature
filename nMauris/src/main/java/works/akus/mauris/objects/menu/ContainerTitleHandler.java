@@ -21,14 +21,14 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import works.akus.mauris.utils.OpenContainerData;
 
-public class InventoryHandler {
+public class ContainerTitleHandler {
 
 	private ConcurrentHashMap<String, OpenContainerData> containerData = new ConcurrentHashMap<>();
 
 	private ProtocolManager protocolManager;
 	private JavaPlugin plugin;
 
-	public InventoryHandler(ProtocolManager protocolManager, JavaPlugin plugin) {
+	public ContainerTitleHandler(ProtocolManager protocolManager, JavaPlugin plugin) {
 		this.protocolManager = protocolManager;
 		this.plugin = plugin;
 

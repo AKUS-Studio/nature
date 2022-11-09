@@ -11,7 +11,7 @@ import com.comphenix.protocol.ProtocolManager;
 import works.akus.mauris.commands.CommandManager;
 import works.akus.mauris.listeners.MaurisItemListener;
 import works.akus.mauris.listeners.ResourcePackListener;
-import works.akus.mauris.objects.menu.InventoryHandler;
+import works.akus.mauris.objects.menu.ContainerTitleHandler;
 import works.akus.mauris.registry.Defaults;
 import works.akus.mauris.resourcepack.ResourcePackManager;
 
@@ -22,7 +22,7 @@ public class Mauris extends JavaPlugin {
 	// Managers
 	private CommandManager commandManager;
 	private ResourcePackManager resourcePackUpdater;
-	private InventoryHandler inventoryHandler;
+	private ContainerTitleHandler inventoryHandler;
 
 	private ProtocolManager protocolManager;
 
@@ -35,7 +35,7 @@ public class Mauris extends JavaPlugin {
 
 		// Managers
 		protocolManager = ProtocolLibrary.getProtocolManager();
-		inventoryHandler = new InventoryHandler(protocolManager, instance);
+		inventoryHandler = new ContainerTitleHandler(protocolManager, instance);
 		
 		commandManager = new CommandManager();
 		commandManager.setUp();
@@ -93,7 +93,7 @@ public class Mauris extends JavaPlugin {
 		return this.protocolManager;
 	}
 	
-	public InventoryHandler getInventoryHandler() {
+	public ContainerTitleHandler getInventoryHandler() {
 		return inventoryHandler;
 	}
 }
