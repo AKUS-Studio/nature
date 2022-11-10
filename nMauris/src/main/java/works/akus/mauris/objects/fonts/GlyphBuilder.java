@@ -29,6 +29,11 @@ public class GlyphBuilder {
 		return append(appended);
 	}
 
+	public GlyphBuilder append(GlyphBuilder builder) {
+		this.component = this.component.append(builder.buildAsComponent());
+		return this;
+	}
+	
 	public GlyphBuilder append(TextComponent component) {
 		this.component = this.component.append(component);
 		return this;

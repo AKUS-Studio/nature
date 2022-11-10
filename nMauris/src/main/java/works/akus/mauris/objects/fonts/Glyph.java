@@ -51,4 +51,8 @@ public class Glyph {
 		return component;
 	}
 
+	public static Glyph of(char unicode, String font) {
+		return new Glyph(null, unicode, font);
+	}
+	
 }
