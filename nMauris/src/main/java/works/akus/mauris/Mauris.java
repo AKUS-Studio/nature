@@ -11,7 +11,7 @@ import com.comphenix.protocol.ProtocolManager;
 import works.akus.mauris.commands.CommandManager;
 import works.akus.mauris.listeners.MaurisItemListener;
 import works.akus.mauris.listeners.ResourcePackListener;
-import works.akus.mauris.objects.menu.ContainerTitleHandler;
+import works.akus.mauris.objects.menu.title.ContainerTitleHandler;
 import works.akus.mauris.registry.Defaults;
 import works.akus.mauris.resourcepack.ResourcePackManager;
 

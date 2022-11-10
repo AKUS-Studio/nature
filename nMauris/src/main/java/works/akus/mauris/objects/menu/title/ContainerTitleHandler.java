@@ -1,4 +1,4 @@
-package works.akus.mauris.objects.menu;
+package works.akus.mauris.objects.menu.title;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,7 +19,6 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import works.akus.mauris.utils.OpenContainerData;
 
 public class ContainerTitleHandler {
 
