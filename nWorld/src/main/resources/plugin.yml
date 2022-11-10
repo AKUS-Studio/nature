@@ -4,3 +4,8 @@ version: ${project.version}
 main: works.akus.world.World
 
 api-version: 1.19
+
+commands:
+  camp:
+    usage: /camp (target)
+    description: Teleports target to the camp

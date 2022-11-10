@@ -27,31 +27,11 @@ public class CampListener implements Listener {
         World fromWorld = e.getFrom();
 
         if(currentWorld == campWorld.getBukkitWorld()){
-            hideEveryoneAndHimself(e.getPlayer());
+            campWorld.joinWorld(e.getPlayer());
         }else if(fromWorld == campWorld.getBukkitWorld()){
-            showEveryoneAndHimself(e.getPlayer());
+            campWorld.leaveWorld(e.getPlayer());
         }
 
-    }
-
-    /**
-     * Shows every player from the CampWorld and Himself to the others
-     */
-    private void showEveryoneAndHimself(Player p){
-        for(Player otherPlayer : campWorld.getBukkitWorld().getPlayers()){
-            p.showPlayer(plugin, otherPlayer);
-            otherPlayer.showPlayer(plugin, p);
-        }
-    }
-
-    /**
-     * Hides every player from the CampWorld and Himself to the others
-     */
-    private void hideEveryoneAndHimself(Player p){
-        for(Player otherPlayer : campWorld.getBukkitWorld().getPlayers()){
-            p.hidePlayer(plugin, otherPlayer);
-            otherPlayer.hidePlayer(plugin, p);
-        }
     }
 
 
