@@ -11,6 +11,7 @@ import com.comphenix.protocol.ProtocolManager;
 import works.akus.mauris.commands.CommandManager;
 import works.akus.mauris.listeners.MaurisItemListener;
 import works.akus.mauris.listeners.ResourcePackListener;
+import works.akus.mauris.objects.menu.MenuListener;
 import works.akus.mauris.objects.menu.title.ContainerTitleHandler;
 import works.akus.mauris.registry.Defaults;
 import works.akus.mauris.resourcepack.ResourcePackManager;
@@ -39,7 +40,7 @@ public class Mauris extends JavaPlugin {
 
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		containerTitleHandler = new ContainerTitleHandler(protocolManager, instance);
-		
+
 		commandManager = new CommandManager();
 		commandManager.initialize();
 
@@ -57,6 +58,7 @@ public class Mauris extends JavaPlugin {
 	private void registerListeners() {
 		Bukkit.getPluginManager().registerEvents(new MaurisItemListener(), instance);
 		Bukkit.getPluginManager().registerEvents(new ResourcePackListener(resourcePackUpdater), instance);
+		getServer().getPluginManager().registerEvents(new MenuListener(), instance);
 	}
 
 	private void loadResourcePackManager() {
