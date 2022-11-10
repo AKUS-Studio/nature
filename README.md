@@ -18,3 +18,4 @@ Nature is a new experimental project, focused on adventure and scavenging in the
 - nWorld - core nature servers' gameplay. Activities, camps, items etc.
 - nMauris - a resource pack handler. Updating the resource pack and handling custom items, blocks and textures.
 - nAuth - Basic OAuth2 Authorization system through Discord.
+- nSocial - Systems for interacting with Players. (Friends, Party, Kick/Ban/Mute)
