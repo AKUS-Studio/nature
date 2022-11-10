@@ -27,7 +27,7 @@ public class CommandManager implements TabExecutor {
         return ColorUtils.format("#b45ee6| Mauris > #cfa0eb");
     }
 
-    public void setUp(){
+    public void initialize(){
         Bukkit.getPluginCommand(getMain()).setExecutor(this);
 
         //Help Command

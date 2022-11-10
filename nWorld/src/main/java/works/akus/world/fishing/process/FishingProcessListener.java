@@ -27,6 +27,8 @@ public class FishingProcessListener implements Listener {
 	@EventHandler
 	public void onFixTheCoil(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
+		if (event.getItem() == null)
+			return;
 		if (!((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) && event.getItem().getType() == Material.FISHING_ROD))
 			return;
 		if (!World.get().getFishingManager().getFishingProcessesHandler().isFishingProcessActive(player))
