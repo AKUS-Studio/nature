@@ -24,6 +24,7 @@
 		<module>nMauris</module>
 		<module>nWorld</module>
 		<module>nAuth</module>
+		<module>nSocial</module>
 	</modules>
 
 	<repositories>
