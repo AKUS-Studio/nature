@@ -14,7 +14,7 @@ public class MenuListener implements Listener {
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
 		final Inventory inventory = event.getView().getTopInventory();
-		final Menu menu = MenuHandler.getMenu(inventory);
+		final Menu menu = MenuHolder.getMenu(inventory);
 
 		if (menu == null) {
 			return;
@@ -27,7 +27,7 @@ public class MenuListener implements Listener {
 	@EventHandler
 	public void onClose(InventoryCloseEvent event) {
 		final Inventory inventory = event.getView().getTopInventory();
-		final Menu menu = MenuHandler.getMenu(inventory);
+		final Menu menu = MenuHolder.getMenu(inventory);
 
 		if (menu == null) {
 			return;
@@ -39,7 +39,7 @@ public class MenuListener implements Listener {
 	@EventHandler
 	public void onOpen(InventoryOpenEvent event) {
 		final Inventory inventory = event.getView().getTopInventory();
-		final Menu menu = MenuHandler.getMenu(inventory);
+		final Menu menu = MenuHolder.getMenu(inventory);
 
 		if (menu == null) {
 			return;
@@ -51,7 +51,7 @@ public class MenuListener implements Listener {
 	@EventHandler
 	public void onDrag(InventoryDragEvent event) {
 		final Inventory inventory = event.getView().getTopInventory();
-		final Menu menu = MenuHandler.getMenu(inventory);
+		final Menu menu = MenuHolder.getMenu(inventory);
 
 		if (menu == null) {
 			return;

@@ -19,10 +19,10 @@ import org.bukkit.inventory.ItemStack;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import works.akus.mauris.objects.fonts.GlyphBuilder;
-import works.akus.mauris.objects.menu.component.Interactable;
 import works.akus.mauris.objects.menu.component.MenuComponent;
-import works.akus.mauris.objects.menu.component.Physical;
-import works.akus.mauris.objects.menu.component.Visual;
+import works.akus.mauris.objects.menu.component.type.Interactable;
+import works.akus.mauris.objects.menu.component.type.Physical;
+import works.akus.mauris.objects.menu.component.type.Visual;
 import works.akus.mauris.utils.InventoryUtils;
 
 public abstract class Menu {
@@ -38,15 +38,7 @@ public abstract class Menu {
 	private ConcurrentHashMap<String, MenuComponent> components = new ConcurrentHashMap<>();
 	private boolean loaded = false;
 
-	public Menu() {
-		buildInventory();
-
-		this.loaded = true;
-	}
-
-	/**
-	 * MENU
-	 */
+	// ------------------------------------
 
 	public boolean hasLoaded() {
 		return loaded;
@@ -76,6 +68,9 @@ public abstract class Menu {
 		this.title = title;
 	}
 
+	/**
+	 * Open the Menu for a given player and update their inventory title.
+	 */
 	public void open(Player player) {
 		player.openInventory(inventory);
 		InventoryUtils.setPlayerInventoryTitle(player, title);
@@ -108,6 +103,27 @@ public abstract class Menu {
 		return inventory;
 	}
 
+	// ------------------------------------
+
+	public void onClick(Player player, InventoryClickEvent event) {
+	}
+
+	public void onClose(Player player, InventoryCloseEvent event) {
+	}
+
+	public void onDrag(Player player, InventoryDragEvent event) {
+	}
+
+	public void onOpen(Player player, InventoryOpenEvent event) {
+	}
+
+	// ------------------------------------
+
+	/**
+	 * Trigger an InventoryInteractEvent for all {@link Interactable} components in
+	 * this Menu. This method takes the raw slot from the event and feeds it to all
+	 * interactable components.
+	 */
 	public void interactWithComponents(InventoryClickEvent event) {
 		final int rawSlot = event.getRawSlot();
 
@@ -123,27 +139,8 @@ public abstract class Menu {
 	}
 
 	/**
-	 * EVENTS
-	 */
-
-	public void onClick(Player player, InventoryClickEvent event) {
-	}
-
-	public void onClose(Player player, InventoryCloseEvent event) {
-	}
-
-	public void onDrag(Player player, InventoryDragEvent event) {
-	}
-
-	public void onOpen(Player player, InventoryOpenEvent event) {
-	}
-
-	/**
-	 * UTILITY
-	 */
-
-	/**
-	 * Render all of the current components inside of the component map.
+	 * Render all of the current components inside of the component map, both
+	 * {@link Visual} and {@link Physical}.
 	 */
 	public void renderAll() {
 		renderVisuals();
@@ -151,7 +148,8 @@ public abstract class Menu {
 	}
 
 	/**
-	 * Render only the visual components and update the inventory title
+	 * Render only the visual components and update the inventory title for all
+	 * viewers
 	 */
 	public void renderVisuals() {
 		GlyphBuilder builder = new GlyphBuilder();
@@ -173,7 +171,7 @@ public abstract class Menu {
 	}
 
 	/**
-	 * Render only the physical components and update the contents
+	 * Render only the physical components and update the contents for all viewers
 	 */
 	public void renderPhysical() {
 
@@ -199,12 +197,16 @@ public abstract class Menu {
 
 	}
 
+	/**
+	 * Builds the {@link Inventory} object according to the given {@link MenuType}
+	 * and title.
+	 */
 	public void buildInventory() {
 		if (this.type.hasRows()) {
 			final int slots = this.type.getRows() * 9;
 
 			this.inventory = Bukkit.createInventory(null, slots, title);
-			MenuHandler.register(this);
+			MenuHolder.register(this);
 			return;
 		}
 
@@ -212,9 +214,12 @@ public abstract class Menu {
 			this.inventory = Bukkit.createInventory(null, InventoryType.ANVIL, title);
 		if (this.type == MenuType.HOPPER)
 			this.inventory = Bukkit.createInventory(null, InventoryType.HOPPER, title);
-		MenuHandler.register(this);
+		MenuHolder.register(this);
 	}
 
+	/**
+	 * Send the new inventory title to all viewers (packet)
+	 */
 	private void renameInventory(TextComponent title) {
 		for (HumanEntity viewer : inventory.getViewers()) {
 			Player player = (Player) viewer;

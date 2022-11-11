@@ -12,6 +12,8 @@ import com.google.common.collect.Maps;
 import net.kyori.adventure.text.Component;
 import works.akus.mauris.objects.fonts.GlyphBuilder;
 import works.akus.mauris.objects.items.ItemStackBuilder;
+import works.akus.mauris.objects.menu.component.type.Physical;
+import works.akus.mauris.objects.menu.component.type.Visual;
 
 public class ImageComponent extends MenuComponent implements Visual, Physical {
 

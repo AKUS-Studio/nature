@@ -9,6 +9,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import works.akus.mauris.objects.items.ItemStackBuilder;
+import works.akus.mauris.objects.menu.component.type.Interactable;
+import works.akus.mauris.objects.menu.component.type.Physical;
 
 public class ItemComponent extends MenuComponent implements Physical, Interactable {
 
@@ -46,6 +48,9 @@ public class ItemComponent extends MenuComponent implements Physical, Interactab
 		this.slot = slot;
 	}
 
+	/**
+	 * Add an InventoryClickEvent listener to this item.
+	 */
 	public void onClick(Function<InventoryClickEvent, Boolean> click) {
 		this.click = click;
 	}
