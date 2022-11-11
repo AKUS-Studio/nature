@@ -51,7 +51,7 @@ public class FriendAcceptCommand implements SubCommand {
             f.acceptFriendRequest(from);
 
             p.sendMessage(prefix + "Вы приняли заявку " + from + " о добавлении в друзья");
-            fr.getOwnerPlayer().sendMessage(prefix + "Ваша заявка в друзья " + sender.getName() + " была приянта");
+            if(SocialManager.isOnline(from)) fr.getOwnerPlayer().sendMessage(prefix + "Ваша заявка в друзья " + sender.getName() + " была приянта");
         }
     }
 

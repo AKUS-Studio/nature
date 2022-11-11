@@ -138,9 +138,16 @@ public class Friend extends WritableSource {
 
         String from = fr.getOwnerFriend().getName();
 
+
         currentRequests.remove(from);
         addFriend(from);
-        fr.getOwnerFriend().addFriend(getName());
+        if(!SocialManager.isOnline(from)){
+            SocialPlayer sp = SocialManager.getSocialPlayer(from);
+            sp.getAsFriend().addFriend(name);
+            sp.save();
+        }else{
+            fr.getOwnerFriend().addFriend(name);
+        }
     }
 
     public void acceptFriendRequest(String from){

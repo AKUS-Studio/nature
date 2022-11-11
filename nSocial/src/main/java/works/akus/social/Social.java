@@ -14,6 +14,11 @@ public class Social extends JavaPlugin {
         SocialManager.setUp();
     }
 
+    @Override
+    public void onDisable() {
+        SocialManager.saveAll();
+    }
+
     public static Social get(){
         return instance;
     }

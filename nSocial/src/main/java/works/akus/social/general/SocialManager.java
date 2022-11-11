@@ -34,6 +34,14 @@ public class SocialManager {
 
         SocialListener listener = new SocialListener();
         Bukkit.getPluginManager().registerEvents(listener, Social.get());
+        Bukkit.getOnlinePlayers().forEach(SocialManager::registerPlayer);
+    }
+
+    public static void saveAll(){
+        for(SocialPlayer sp : socialPlayersLoaded.values()){
+            sp.save();
+            return;
+        }
     }
 
     public static void registerPlayer(Player p){
