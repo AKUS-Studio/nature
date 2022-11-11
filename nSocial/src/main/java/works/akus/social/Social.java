@@ -1,6 +1,7 @@
 package works.akus.social;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import works.akus.social.general.SocialManager;
 
 public class Social extends JavaPlugin {
 
@@ -10,6 +11,7 @@ public class Social extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        SocialManager.setUp();
     }
 
     public static Social get(){

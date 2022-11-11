@@ -3,3 +3,8 @@ version: ${project.version}
 main: works.akus.social.Social
 api-version: 1.19
 description: Social systems for interacting with players
+
+commands:
+  friend:
+    usage: /friend
+    description: friend commands
