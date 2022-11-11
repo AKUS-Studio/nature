@@ -1,5 +1,11 @@
 package works.akus.social.friend;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,6 +14,7 @@ import works.akus.social.commands.general.CommandManager;
 import works.akus.social.general.SocialManager;
 import works.akus.social.general.SocialPlayer;
 import works.akus.social.general.WritableSource;
+import works.akus.social.utils.AKUSColorPalette;
 
 import java.util.*;
 
@@ -63,10 +70,22 @@ public class Friend extends WritableSource {
     //
 
     private void addFriendRequest(FriendRequest fr){
-        if(currentRequests.containsKey(fr.getOwnerPlayer().getName())) return;
-        currentRequests.put(fr.getOwnerPlayer().getName(), fr);
+        String frname = fr.getOwnerFriend().getName();
+        if(currentRequests.containsKey(frname)) return;
+        currentRequests.put(frname, fr);
 
-        getPlayer().sendMessage(CommandManager.getPrefix() + "К вам запрос в друзья от " + fr.getOwnerPlayer().getName());
+
+        final TextComponent requestMessage = Component.text("К вам запрос в друзья от " + frname).color(AKUSColorPalette.SIMPLE_GRAY.getTextColor())
+                .append(Component.text("\n"))
+                .append(Component.text("[Принять]").clickEvent(ClickEvent.runCommand(
+                        "/friend accept " + frname
+                )).color(AKUSColorPalette.ACCEPT.getTextColor()))
+                .append(Component.text("  "))
+                .append(Component.text("[Отклонить]").clickEvent(ClickEvent.runCommand(
+                        "/friend deny " + frname
+                )).color(AKUSColorPalette.REJECT.getTextColor()));
+
+        getPlayer().sendMessage(requestMessage.compact());
     }
 
     public void addFriend(String name){

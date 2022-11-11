@@ -41,8 +41,18 @@ public class SocialManager {
         socialPlayersLoaded.put(p, sp);
     }
 
+    private static void registerPlayer(Player p, SocialPlayer sp){
+        socialPlayersLoaded.put(p, sp);
+    }
+
     public static void unregisterPlayer(Player p){
         SocialPlayer sp = socialPlayersLoaded.get(p);
+        if(sp != null) sp.save();
+
+        socialPlayersLoaded.remove(p);
+    }
+
+    private static void unregisterPlayer(Player p, SocialPlayer sp){
         if(sp != null) sp.save();
 
         socialPlayersLoaded.remove(p);
@@ -58,6 +68,7 @@ public class SocialManager {
         if(sp != null) return sp;
 
         sp = SocialPlayer.load(p.getName());
+        if(p.isOnline()) registerPlayer(p, sp);
         return sp;
     }
 
