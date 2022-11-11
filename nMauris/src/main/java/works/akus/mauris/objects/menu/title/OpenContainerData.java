@@ -1,4 +1,4 @@
-package works.akus.mauris.utils;
+package works.akus.mauris.objects.menu.title;
 
 public class OpenContainerData {
 	private int windowId;

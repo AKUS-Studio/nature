@@ -123,10 +123,6 @@ public class GitRepository {
 
     //
 
-    private JSONObject getJsonFromInputStream(InputStream inputStream){
-        return (JSONObject) getObjectJsonFromInputStream(inputStream);
-    }
-
     private JSONArray getJsonArrayFromInputStream(InputStream inputStream){
         return (JSONArray) getObjectJsonFromInputStream(inputStream);
     }
