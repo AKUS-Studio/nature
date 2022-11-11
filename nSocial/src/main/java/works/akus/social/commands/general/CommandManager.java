@@ -5,8 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import works.akus.social.utils.ColorUtils;
 
 import java.util.ArrayList;
@@ -87,7 +85,7 @@ public class CommandManager implements TabExecutor {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (args.length < 2) {
             List<String> subCommands = new ArrayList<>();
             for (SubCommand scommand : commands.values()) {

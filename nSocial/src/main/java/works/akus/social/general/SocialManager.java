@@ -3,9 +3,9 @@ package works.akus.social.general;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import works.akus.social.Social;
-import works.akus.social.commands.friend.FriendAcceptCommand;
-import works.akus.social.commands.friend.FriendAddCommand;
-import works.akus.social.commands.friend.FriendRemoveCommand;
+import works.akus.social.friend.commands.FriendAcceptCommand;
+import works.akus.social.friend.commands.FriendAddCommand;
+import works.akus.social.friend.commands.FriendRemoveCommand;
 import works.akus.social.commands.HelpCommand;
 import works.akus.social.commands.general.CommandManager;
 

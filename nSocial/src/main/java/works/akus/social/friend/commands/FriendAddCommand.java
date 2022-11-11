@@ -1,9 +1,8 @@
-package works.akus.social.commands.friend;
+package works.akus.social.friend.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import works.akus.social.commands.general.CommandManager;
 import works.akus.social.commands.general.SubCommand;
 import works.akus.social.friend.Friend;
 import works.akus.social.general.SocialManager;
