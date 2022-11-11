@@ -64,16 +64,17 @@ public class SocialManager {
     }
 
     public static SocialPlayer getSocialPlayer(Player p){
-        SocialPlayer sp = socialPlayersLoaded.get(p);
-        if(sp != null) return sp;
-
-        sp = SocialPlayer.load(p.getName());
-        if(p.isOnline()) registerPlayer(p, sp);
-        return sp;
+        return getSocialPlayer(p.getName());
     }
 
     public static SocialPlayer getSocialPlayer(String name){
-        return getSocialPlayer(Bukkit.getPlayer(name));
+        Player p = Bukkit.getPlayer(name);
+        SocialPlayer sp = socialPlayersLoaded.get(p);
+        if(sp != null) return sp;
+
+        sp = SocialPlayer.load(name);
+        if(isOnline(name)) registerPlayer(p, sp);
+        return sp;
     }
 
 }
