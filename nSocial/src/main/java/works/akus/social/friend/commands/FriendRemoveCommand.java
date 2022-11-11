@@ -36,7 +36,7 @@ public class FriendRemoveCommand implements SubCommand {
         }
 
         fr.removeFriend(name);
-        p.sendMessage(prefix + "успешно удалил " + name + " из друзей");
+        p.sendMessage(prefix + "Успешно удалил " + name + " из друзей");
     }
 
     @Override

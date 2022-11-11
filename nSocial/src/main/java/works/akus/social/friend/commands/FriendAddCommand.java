@@ -53,7 +53,7 @@ public class FriendAddCommand implements SubCommand {
         }
 
         fr.sendFriendRequest(name);
-        p.sendMessage(prefix + "Отправил запрос к " + name);
+        p.sendMessage(prefix + "Отправил запрос в друзья к " + name);
     }
 
     @Override

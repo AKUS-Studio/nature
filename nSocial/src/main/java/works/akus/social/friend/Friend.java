@@ -66,14 +66,7 @@ public class Friend extends WritableSource {
         if(currentRequests.containsKey(fr.getOwnerPlayer().getName())) return;
         currentRequests.put(fr.getOwnerPlayer().getName(), fr);
 
-        getPlayer().sendMessage(CommandManager.getPrefix() + "Получил запрос от " + fr.getOwnerPlayer().getName());
-    }
-
-    private void addFriendRequest(Friend f){
-        if(currentRequests.containsKey(f.getName())) return;
-        FriendRequest fr = new FriendRequest(f, this);
-
-        addFriendRequest(fr);
+        getPlayer().sendMessage(CommandManager.getPrefix() + "К вам запрос в друзья от " + fr.getOwnerPlayer().getName());
     }
 
     public void addFriend(String name){
@@ -84,7 +77,6 @@ public class Friend extends WritableSource {
         if(!getFriends().contains(name)) return;
 
         SocialPlayer sp = SocialManager.getSocialPlayer(name);
-        sp.getAsFriend().removeFriend(getName());
 
         if(!SocialManager.isOnline(name)){
             sp.save();
@@ -92,6 +84,7 @@ public class Friend extends WritableSource {
         }
 
         friends.remove(name);
+        sp.getAsFriend().removeFriend(getName());
     }
 
     public void sendFriendRequest(String name){
@@ -103,6 +96,22 @@ public class Friend extends WritableSource {
         Friend fr = sp.getAsFriend();
 
         fr.addFriendRequest(new FriendRequest(this, fr));
+    }
+
+    public void denyFriendRequest(FriendRequest fr){
+        if(fr == null) return;
+
+        String from = fr.getOwnerFriend().getName();
+        currentRequests.remove(from);
+    }
+
+    public void denyFriendRequest(String from){
+        denyFriendRequest(getFriendRequest(from));
+    }
+
+    public void denyLastFriendRequest(){
+        if(currentRequests.isEmpty()) return;
+        denyFriendRequest(currentRequests.lastEntry().getValue());
     }
 
     public void acceptFriendRequest(FriendRequest fr){
@@ -128,6 +137,10 @@ public class Friend extends WritableSource {
     //
     // GETTERS
     //
+
+    public FriendRequest getLastRequest(){
+        return currentRequests.lastEntry().getValue();
+    }
 
     public String getName() {
         return name;

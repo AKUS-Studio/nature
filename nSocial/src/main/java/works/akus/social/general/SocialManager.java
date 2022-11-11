@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import works.akus.social.Social;
 import works.akus.social.friend.commands.FriendAcceptCommand;
 import works.akus.social.friend.commands.FriendAddCommand;
+import works.akus.social.friend.commands.FriendDenyCommand;
 import works.akus.social.friend.commands.FriendRemoveCommand;
 import works.akus.social.commands.HelpCommand;
 import works.akus.social.commands.general.CommandManager;
@@ -27,6 +28,7 @@ public class SocialManager {
                 new FriendAddCommand(),
                 new FriendAcceptCommand(),
                 new FriendRemoveCommand(),
+                new FriendDenyCommand(),
                 helpCommand
         );
 
