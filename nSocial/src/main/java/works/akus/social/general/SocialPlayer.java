@@ -5,9 +5,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import works.akus.social.Social;
 import works.akus.social.friend.Friend;
+import works.akus.social.party.Party;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SocialPlayer {
 
@@ -19,6 +23,8 @@ public class SocialPlayer {
         this.friend = friend;
         this.name = friend.getName();
         this.player = friend.getPlayer();
+
+        partyInvites = new LinkedHashMap<>();
     }
 
     YamlConfiguration config;
@@ -29,6 +35,49 @@ public class SocialPlayer {
     String name;
     Player player;
 
+    Party party;
+    LinkedHashMap<Party, SocialPlayer> partyInvites;
+    /*
+    Party Methods
+     */
+
+    public void setParty(Party party){
+        clearPartyInvites();
+        this.party = party;
+    }
+
+    public LinkedHashMap<Party, SocialPlayer> getPartyInvites(){
+        return partyInvites;
+    }
+
+    public void clearPartyInvites(){
+        for(Party party : getPartyInvites().keySet()){
+            party.removeOutComeInvite(this);
+        }
+
+        partyInvites.clear();
+    }
+
+    public void addPartyInvite(SocialPlayer sender, Party party){
+        partyInvites.put(party, sender);
+    }
+
+    public void removePartyInvite(Party party){
+        partyInvites.remove(party);
+    }
+
+    /*
+    GETTERS
+     */
+
+    public String getName(){
+        return name;
+    }
+
+    public Party getParty(){
+        return party;
+    }
+
     public Player getPlayer(){
         player = Bukkit.getPlayer(name);
         return player;
@@ -37,6 +86,10 @@ public class SocialPlayer {
     public Friend getAsFriend(){
         return friend;
     }
+
+    /*
+    FILE UTILS
+     */
 
     public void save(){
         friend.write();

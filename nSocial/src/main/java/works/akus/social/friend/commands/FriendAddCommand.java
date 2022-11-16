@@ -38,7 +38,7 @@ public class FriendAddCommand implements SubCommand {
         String name = args[1];
 
         if(name.equals(sender.getName())){
-            p.sendMessage(prefix + " дурашка?");
+            p.sendMessage(prefix + "дурашка?");
             return;
         }
 

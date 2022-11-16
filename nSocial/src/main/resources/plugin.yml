@@ -8,3 +8,6 @@ commands:
   friend:
     usage: /friend
     description: friend commands
+  party:
+    usage: /party
+    description: party commands
