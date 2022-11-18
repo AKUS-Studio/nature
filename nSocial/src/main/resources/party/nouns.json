@@ -18,12 +18,24 @@
       "gender": "M"
     },
     {
-      "noun": "Дождь",
+      "noun": "Вопрос",
       "gender": "M"
     },
     {
-      "noun": "Вопрос",
+      "noun": "Вафельная",
+      "gender": "F"
+    },
+    {
+      "noun": "Дом",
       "gender": "M"
+    },
+    {
+      "noun": "Цветок",
+      "gender": "M"
+    },
+    {
+      "noun": "Кафе",
+      "gender": "N"
     },
     {
       "noun": "Игра",
