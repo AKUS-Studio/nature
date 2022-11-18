@@ -10,12 +10,16 @@
       "gender": "M"
     },
     {
-      "noun": "Диван",
+      "noun": "Лобби",
+      "gender": "N"
+    },
+    {
+      "noun": "Сосуд",
       "gender": "M"
     },
     {
-      "noun": "Лобби",
-      "gender": "N"
+      "noun": "Дождь",
+      "gender": "M"
     },
     {
       "noun": "Вопрос",

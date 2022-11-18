@@ -30,9 +30,9 @@ public class PartyLeaveCommand implements SubCommand {
             return;
         }
 
-        sender.sendMessage(party.getMessagePrefixText() + " Вы вышли из пати");
+        sender.sendMessage(party.getMessagePrefixText() + "Вы вышли из пати");
+        party.sendMessage(sender.getName() + " вышел из пати по своей воле", List.of(spSender));
         party.removePlayer(spSender);
-        party.sendMessage(sender.getName() + " вышел из пати по своей воле");
     }
 
     @Override

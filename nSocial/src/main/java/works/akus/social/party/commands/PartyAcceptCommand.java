@@ -31,10 +31,10 @@ public class PartyAcceptCommand implements SubCommand {
         }
 
         if(args.length < 2){
-            Party party = (Party) spSender.getPartyInvites().keySet().toArray()[0];
+            Party party = (Party) spSender.getPartyInvites().keySet().toArray()[spSender.getPartyInvites().size() - 1];
 
-            party.sendMessage(sender.getName() + " вступил в пати!");
             party.accept(spSender);
+            party.sendMessage(sender.getName() + " вступил в пати!", List.of(spSender));
             sender.sendMessage(party.getMessagePrefixText() + "Вы вступили в пати");
             return;
         }
@@ -48,8 +48,8 @@ public class PartyAcceptCommand implements SubCommand {
         SocialPlayer spArg = SocialManager.getSocialPlayer(name);
         Party party = spArg.getParty();
 
-        party.sendMessage(sender.getName() + " вступил в пати!");
         party.accept(spArg);
+        party.sendMessage(sender.getName() + " вступил в пати!", List.of(spSender));
         sender.sendMessage(party.getMessagePrefixText() + "Вы вступили в пати");
     }
 

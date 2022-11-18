@@ -6,7 +6,9 @@ public enum AKUSColorPalette {
 
     SIMPLE_GRAY("#B4B4B4"),
     ACCEPT("#79FF87"),
-    REJECT("#ED8E8E");
+    REJECT("#ED8E8E"),
+
+    DEFAULT_PARTY("#f0899a");
 
     String hexColor;
     AKUSColorPalette(String hexColor){

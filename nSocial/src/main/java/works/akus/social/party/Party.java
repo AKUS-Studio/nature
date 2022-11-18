@@ -5,6 +5,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
+import works.akus.social.Social;
 import works.akus.social.commands.general.CommandManager;
 import works.akus.social.general.SocialPlayer;
 import works.akus.social.party.namegenerator.NameGenerator;
@@ -72,7 +73,7 @@ public class Party {
         Player p = splayer.getPlayer();
 
         if(isInParty(splayer)) {
-            sender.getPlayer().sendMessage(getMessagePrefixText() + p.getName() + " Уже в вашем пати");
+            sender.getPlayer().sendMessage(getMessagePrefixText() + p.getName() + " уже в вашем пати");
             return;
         }
 
@@ -86,8 +87,8 @@ public class Party {
 
         sender.getPlayer().sendMessage(getMessagePrefixText() + "Успешно отправил заявку " + p.getName());
 
-        final Component requestMessage = getMessagePrefixComponent().append(Component.text( "Пришло приглашение в пати")
-                .color(getDisplayColor(50)))
+        final Component requestMessage = Component.text("Пати > ").color(AKUSColorPalette.DEFAULT_PARTY.getTextColor())
+                .append(Component.text( "Пришло приглашение в пати").color(setColorLightness(AKUSColorPalette.DEFAULT_PARTY.getTextColor(), 50)))
                 .append(Component.text("\n"))
                 .append(Component.text("[Принять]").clickEvent(ClickEvent.runCommand(
                         "/party accept "
@@ -117,6 +118,9 @@ public class Party {
             owner.clearPartyInvites();
             partyKeeper.put(owner, this);
             active = true;
+            sendMessage(Component.text(" > Союз ").color(getDisplayColor(50)).append(
+                    Component.text(displayName).color(getDisplayColor(75))).append(
+                    Component.text( " сформировался").color(getDisplayColor(50))), false);
         }
     }
 
@@ -128,17 +132,19 @@ public class Party {
         this.playerList.remove(player);
         player.setParty(null);
 
-        if(this.playerList.size() < 2){
-            owner.setParty(null);
-            this.active = false;
-            partyKeeper.remove(this);
-            return;
-        }
-
         if(player == owner){
             partyKeeper.remove(this);
             owner = this.playerList.get(0);
             partyKeeper.put(owner, this);
+        }
+
+        if(this.playerList.size() < 2){
+            owner.setParty(null);
+            sendMessage(Component.text(" > Союз ").color(getDisplayColor(50)).append(
+                    Component.text(displayName).color(getDisplayColor(75))).append(
+                    Component.text( " расформировался").color(getDisplayColor(50))), false);
+            this.active = false;
+            partyKeeper.remove(this);
         }
     }
 
@@ -182,44 +188,77 @@ public class Party {
     }
 
     public String getMessagePrefixText(){
+
+        if(!isActive()){
+            return ColorUtils.format(AKUSColorPalette.DEFAULT_PARTY.getHexColor() + "Пати > "
+                    + setColorLightness(AKUSColorPalette.DEFAULT_PARTY.getTextColor(), 50).asHexString());
+        }
+
         return ColorUtils.format(getDisplayColor().asHexString() +
                 displayName + " > " +
                 getDisplayColor(50).asHexString());
     }
 
     public Component getMessagePrefixComponent(){
-        return Component.text(displayName + " > ").color(getDisplayColor())
-                .append(Component.text().color(getDisplayColor(50)));
+        if(!isActive()){
+            return Component.text("Пати > ").color(AKUSColorPalette.DEFAULT_PARTY.getTextColor());
+        }
+
+        return Component.text(displayName + " > ").color(getDisplayColor());
     }
 
     /*
     Other
      */
 
+    //Send Message
     public void sendMessage(String message){
         sendMessage(Component.text(message));
     }
 
+    public void sendMessage(String message, List<SocialPlayer> except){
+        sendMessage(Component.text(message), except);
+    }
+
+    public void sendMessage(Component component, boolean prefix){
+        sendMessage(component, new ArrayList<>(), prefix);
+    }
+
+    public void sendMessage(Component component, List<SocialPlayer> except){
+        sendMessage(component, except, true);
+    }
+
     public void sendMessage(Component component){
-        for(SocialPlayer sp : playerList){
-            sp.getPlayer().sendMessage(getMessagePrefixComponent().append(component));
+        sendMessage(component, new ArrayList<>(), true);
+    }
+
+    public void sendMessage(Component component, List<SocialPlayer> except, boolean prefix){
+        for(SocialPlayer sp : getPlayers()){
+            if(except.contains(sp)) continue;
+            if(prefix) sp.getPlayer().sendMessage(getMessagePrefixComponent().append(component.colorIfAbsent(getDisplayColor(50))));
+            else sp.getPlayer().sendMessage(component.colorIfAbsent(getDisplayColor(50)));
         }
     }
+    //
 
     public String generateUniqueName(){
         return NameGenerator.getPhrase();
     }
 
     public TextColor getDisplayColor(int lightness){
+        return setColorLightness(displayColor, lightness);
+    }
 
-        int r = Math.min(displayColor.red() + lightness, 255);
-        int g = Math.min(displayColor.green() + lightness, 255);
-        int b = Math.min(displayColor.blue() + lightness, 255);
+    public static TextColor setColorLightness(TextColor color, int lightness){
+
+        int r = Math.min(color.red() + lightness, 255);
+        int g = Math.min(color.green() + lightness, 255);
+        int b = Math.min(color.blue() + lightness, 255);
 
         return TextColor.color(r, g , b);
     }
 
-    final int generalColorLightness = 100;
+    final int generalColorLightness = 69;
     public TextColor generateColor(){
 
         Random rand = new Random();

@@ -43,8 +43,8 @@ public class PartyRemoveCommand implements SubCommand {
         }
 
         SocialPlayer spTarget = SocialManager.getSocialPlayer(name);
+        party.sendMessage(name + " успешно удалён из вашего пати");
         party.removePlayer(spTarget);
-        party.sendMessage(name + "успешно удалён из вашего пати");
     }
 
     public List<String> canRemove(CommandSender sender){
