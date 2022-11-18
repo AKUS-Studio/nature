@@ -10,10 +10,7 @@ import works.akus.social.friend.commands.FriendRemoveCommand;
 import works.akus.social.commands.HelpCommand;
 import works.akus.social.commands.general.CommandManager;
 import works.akus.social.party.Party;
-import works.akus.social.party.commands.PartyAcceptCommand;
-import works.akus.social.party.commands.PartyInviteCommand;
-import works.akus.social.party.commands.PartyLeaveCommand;
-import works.akus.social.party.commands.PartyRemoveCommand;
+import works.akus.social.party.commands.*;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -48,6 +45,8 @@ public class SocialManager {
                 new PartyInviteCommand(),
                 new PartyRemoveCommand(),
                 new PartyLeaveCommand(),
+                new PartyDenyCommand(),
+                new PartyMessageCommand(),
                 pHelpCommand
         );
 

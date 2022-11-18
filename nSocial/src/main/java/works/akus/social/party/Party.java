@@ -60,6 +60,15 @@ public class Party {
         sp.removePartyInvite(this);
     }
 
+    public void deny(SocialPlayer sp){
+        if(!partyOutcomeInvites.contains(sp)){
+            return;
+        }
+
+        sp.removePartyInvite(this);
+        partyOutcomeInvites.remove(sp);
+    }
+
     public void removeOutComeInvite(SocialPlayer sp){
         partyOutcomeInvites.remove(sp);
     }
