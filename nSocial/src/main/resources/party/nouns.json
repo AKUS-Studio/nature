@@ -1,0 +1,38 @@
+{
+  "nouns": [
+
+    {
+      "noun": "Бар",
+      "gender": "M"
+    },
+    {
+      "noun": "Корабль",
+      "gender": "M"
+    },
+    {
+      "noun": "Диван",
+      "gender": "M"
+    },
+    {
+      "noun": "Лобби",
+      "gender": "N"
+    },
+    {
+      "noun": "Вопрос",
+      "gender": "M"
+    },
+    {
+      "noun": "Игра",
+      "gender": "F"
+    },
+    {
+      "noun": "Колесница",
+      "gender": "F"
+    },
+    {
+      "noun": "Дети",
+      "plural": true
+    }
+
+  ]
+}

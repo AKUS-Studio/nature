@@ -2,6 +2,7 @@ package works.akus.social;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import works.akus.social.general.SocialManager;
+import works.akus.social.party.namegenerator.NameGenerator;
 
 public class Social extends JavaPlugin {
 
@@ -11,6 +12,7 @@ public class Social extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        NameGenerator.load();
         SocialManager.setUp();
     }
 

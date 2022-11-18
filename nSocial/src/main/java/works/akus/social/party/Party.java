@@ -7,11 +7,14 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 import works.akus.social.commands.general.CommandManager;
 import works.akus.social.general.SocialPlayer;
+import works.akus.social.party.namegenerator.NameGenerator;
 import works.akus.social.utils.AKUSColorPalette;
+import works.akus.social.utils.ColorUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class Party {
 
@@ -62,28 +65,29 @@ public class Party {
 
     public void invitePlayer(SocialPlayer sender, SocialPlayer splayer){
         if(onlyOwnerCanInvitePlayers && sender != owner){
-            sender.getPlayer().sendMessage(getMessagePrefix() + "В вашем пати только создатель может приглашать людей");
+            sender.getPlayer().sendMessage(getMessagePrefixText() + "В вашем пати только создатель может приглашать людей");
             return;
         }
 
         Player p = splayer.getPlayer();
 
         if(isInParty(splayer)) {
-            sender.getPlayer().sendMessage(getMessagePrefix() + p.getName() + "Уже в вашем пати");
+            sender.getPlayer().sendMessage(getMessagePrefixText() + p.getName() + " Уже в вашем пати");
             return;
         }
 
         if(splayer.getParty() != null){
-            sender.getPlayer().sendMessage(getMessagePrefix() + p.getName() + "Находится в чужом пати под названием " + splayer.getParty().getDisplayName());
+            sender.getPlayer().sendMessage(getMessagePrefixText() + p.getName() + " Находится в чужом пати под названием " + splayer.getParty().getDisplayName());
             return;
         }
 
         partyOutcomeInvites.add(splayer);
         splayer.addPartyInvite(sender, this);
 
-        sender.getPlayer().sendMessage(getMessagePrefix() + "Успешно отправил заявку " + p.getName());
+        sender.getPlayer().sendMessage(getMessagePrefixText() + "Успешно отправил заявку " + p.getName());
 
-        final TextComponent requestMessage = Component.text(getMessagePrefix() + "Пришло приглашение в пати")
+        final Component requestMessage = getMessagePrefixComponent().append(Component.text( "Пришло приглашение в пати")
+                .color(getDisplayColor(50)))
                 .append(Component.text("\n"))
                 .append(Component.text("[Принять]").clickEvent(ClickEvent.runCommand(
                         "/party accept "
@@ -177,8 +181,15 @@ public class Party {
         return displayName;
     }
 
-    public String getMessagePrefix(){
-        return displayName + CommandManager.getPrefix();
+    public String getMessagePrefixText(){
+        return ColorUtils.format(getDisplayColor().asHexString() +
+                displayName + " > " +
+                getDisplayColor(50).asHexString());
+    }
+
+    public Component getMessagePrefixComponent(){
+        return Component.text(displayName + " > ").color(getDisplayColor())
+                .append(Component.text().color(getDisplayColor(50)));
     }
 
     /*
@@ -191,17 +202,33 @@ public class Party {
 
     public void sendMessage(Component component){
         for(SocialPlayer sp : playerList){
-            sp.getPlayer().sendMessage(Component.text(getMessagePrefix()).append(component));
+            sp.getPlayer().sendMessage(getMessagePrefixComponent().append(component));
         }
     }
 
-    //TODO
     public String generateUniqueName(){
-        return "PartyPlaceholder";
+        return NameGenerator.getPhrase();
     }
 
+    public TextColor getDisplayColor(int lightness){
+
+        int r = Math.min(displayColor.red() + lightness, 255);
+        int g = Math.min(displayColor.green() + lightness, 255);
+        int b = Math.min(displayColor.blue() + lightness, 255);
+
+        return TextColor.color(r, g , b);
+    }
+
+    final int generalColorLightness = 100;
     public TextColor generateColor(){
-        return AKUSColorPalette.SIMPLE_GRAY.getTextColor();
+
+        Random rand = new Random();
+        int r = rand.nextInt(255 - generalColorLightness) + generalColorLightness;
+        int g = rand.nextInt(255 - generalColorLightness) + generalColorLightness;
+        int b = rand.nextInt(255 - generalColorLightness) + generalColorLightness;
+
+
+        return TextColor.color(r, g, b);
     }
 
 

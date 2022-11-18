@@ -35,7 +35,7 @@ public class PartyAcceptCommand implements SubCommand {
 
             party.sendMessage(sender.getName() + " вступил в пати!");
             party.accept(spSender);
-            sender.sendMessage(party.getMessagePrefix() + "Вы вступили в пати");
+            sender.sendMessage(party.getMessagePrefixText() + "Вы вступили в пати");
             return;
         }
 
@@ -50,7 +50,7 @@ public class PartyAcceptCommand implements SubCommand {
 
         party.sendMessage(sender.getName() + " вступил в пати!");
         party.accept(spArg);
-        sender.sendMessage(party.getMessagePrefix() + "Вы вступили в пати");
+        sender.sendMessage(party.getMessagePrefixText() + "Вы вступили в пати");
     }
 
     public List<String> getPlayersInvite(CommandSender sender){
