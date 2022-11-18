@@ -66,6 +66,7 @@ public class PartyInviteCommand implements SubCommand {
         for (SocialPlayer sp : SocialManager.getSocialPlayers()){
             names.add(sp.getName());
         }
+        names.remove(sender.getName());
 
         return names;
     }
