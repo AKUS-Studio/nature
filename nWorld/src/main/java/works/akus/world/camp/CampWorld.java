@@ -57,7 +57,7 @@ public class CampWorld {
             campWorld.setPVP(false);
         }
     }
-e
+
     public void joinWorld(Player p){
         hideEveryoneAndHimself(p, getPlayerListExceptParty(p));
         if(!p.isOp()) p.setGameMode(GameMode.ADVENTURE);
