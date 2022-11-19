@@ -5,6 +5,10 @@ main: works.akus.world.World
 
 api-version: 1.19
 
+depend:
+  - nMauris
+  - nSocial
+
 commands:
   camp:
     usage: /camp (target)
