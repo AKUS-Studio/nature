@@ -1,13 +1,13 @@
 package works.akus.social.party;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import works.akus.social.Social;
-import works.akus.social.commands.general.CommandManager;
 import works.akus.social.general.SocialPlayer;
+import works.akus.social.party.events.PartyAddEvent;
+import works.akus.social.party.events.PartyRemoveEvent;
 import works.akus.social.party.namegenerator.NameGenerator;
 import works.akus.social.utils.AKUSColorPalette;
 import works.akus.social.utils.ColorUtils;
@@ -131,6 +131,9 @@ public class Party {
                     Component.text(displayName).color(getDisplayColor(75))).append(
                     Component.text( " сформировался").color(getDisplayColor(50))), false);
         }
+
+        PartyAddEvent event = new PartyAddEvent(this, player);
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     public void removePlayers(SocialPlayer... players){
@@ -155,6 +158,8 @@ public class Party {
             this.active = false;
             partyKeeper.remove(this);
         }
+        PartyRemoveEvent event = new PartyRemoveEvent(this, player);
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     /*
