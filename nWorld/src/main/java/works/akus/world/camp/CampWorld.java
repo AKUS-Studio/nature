@@ -57,9 +57,10 @@ public class CampWorld {
             campWorld.setPVP(false);
         }
     }
-
+e
     public void joinWorld(Player p){
         hideEveryoneAndHimself(p, getPlayerListExceptParty(p));
+        if(!p.isOp()) p.setGameMode(GameMode.ADVENTURE);
     }
 
     public void leaveWorld(Player p){
@@ -92,6 +93,8 @@ public class CampWorld {
      */
     private void showEveryoneAndHimself(Player p, List<Player> players){
         for(Player otherPlayer : players){
+            if(p == otherPlayer) continue;
+
             p.showPlayer(plugin, otherPlayer);
             otherPlayer.showPlayer(plugin, p);
         }
@@ -116,6 +119,8 @@ public class CampWorld {
      */
     private void hideEveryoneAndHimself(Player p, List<Player> players){
         for(Player otherPlayer : players){
+            if(p == otherPlayer) continue;
+
             p.hidePlayer(plugin, otherPlayer);
             otherPlayer.hidePlayer(plugin, p);
         }
