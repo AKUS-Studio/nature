@@ -6,6 +6,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import works.akus.social.party.Party;
+import works.akus.social.party.commands.PartyLeaveCommand;
+import works.akus.social.party.events.PartyAddEvent;
+import works.akus.social.party.events.PartyRemoveEvent;
 
 public class CampListener implements Listener {
 
@@ -15,6 +19,16 @@ public class CampListener implements Listener {
     public CampListener(CampWorld world){
         this.campWorld = world;
         plugin = works.akus.world.World.get();
+    }
+
+    @EventHandler
+    public void playerLeaveParty(PartyRemoveEvent addEvent){
+        campWorld.hideParty(addEvent.getPlayer().getPlayer(), addEvent.getParty());
+    }
+
+    @EventHandler
+    public void playerJoinParty(PartyAddEvent addEvent){
+        campWorld.showParty(addEvent.getPlayer().getPlayer(), addEvent.getParty());
     }
 
     /**

@@ -15,5 +15,13 @@
 			<version>0.2.1</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>works.akus</groupId>
+			<artifactId>nSocial</artifactId>
+			<version>0.0.2</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
+
 </project>

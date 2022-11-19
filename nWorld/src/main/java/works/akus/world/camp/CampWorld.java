@@ -1,10 +1,14 @@
 package works.akus.world.camp;
 
-import io.papermc.paper.entity.RelativeTeleportFlag;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import works.akus.social.general.SocialManager;
+import works.akus.social.general.SocialPlayer;
+import works.akus.social.party.Party;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CampWorld {
 
@@ -55,11 +59,26 @@ public class CampWorld {
     }
 
     public void joinWorld(Player p){
-        hideEveryoneAndHimself(p);
+        hideEveryoneAndHimself(p, getPlayerListExceptParty(p));
     }
 
     public void leaveWorld(Player p){
-        showEveryoneAndHimself(p);
+        showEveryoneAndHimself(p, getPlayerListExceptParty(p));
+    }
+
+    private List<Player> getPlayerListExceptParty(Player p){
+        SocialPlayer sp = SocialManager.getSocialPlayer(p);
+        Party party = sp.getParty();
+
+        List<Player> playersInParty = party.getBukkitPlayers();
+
+        List<Player> endList = new ArrayList<>();
+        for(Player pl1 : campWorld.getPlayers()){
+            if(playersInParty.contains(pl1)) continue;
+            endList.add(pl1);
+        }
+
+        return endList;
     }
 
     public static void teleportPlayerToCamp(Player p){
@@ -71,18 +90,32 @@ public class CampWorld {
     /**
      * Shows every player from the CampWorld and Himself to the others
      */
-    private void showEveryoneAndHimself(Player p){
-        for(Player otherPlayer : campWorld.getPlayers()){
+    private void showEveryoneAndHimself(Player p, List<Player> players){
+        for(Player otherPlayer : players){
             p.showPlayer(plugin, otherPlayer);
             otherPlayer.showPlayer(plugin, p);
         }
     }
 
     /**
+     * Shows every player from the Party and Himself to the others
+     */
+    public void showParty(Player p, Party party){
+        showEveryoneAndHimself(p, party.getBukkitPlayers());
+    }
+
+    /**
+     * Hides every player from the Party and Himself to the others
+     */
+    public void hideParty(Player p, Party party){
+        hideEveryoneAndHimself(p, party.getBukkitPlayers());
+    }
+
+    /**
      * Hides every player from the CampWorld and Himself to the others
      */
-    private void hideEveryoneAndHimself(Player p){
-        for(Player otherPlayer : campWorld.getPlayers()){
+    private void hideEveryoneAndHimself(Player p, List<Player> players){
+        for(Player otherPlayer : players){
             p.hidePlayer(plugin, otherPlayer);
             otherPlayer.hidePlayer(plugin, p);
         }

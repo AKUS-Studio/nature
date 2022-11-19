@@ -169,6 +169,13 @@ public class Party {
         return playerList;
     }
 
+    public List<Player> getBukkitPlayers(){
+        List<Player> playersInParty = new ArrayList<>();
+        getPlayers().forEach(splist -> playersInParty.add(splist.getPlayer()));
+
+        return playersInParty;
+    }
+
     public boolean isOnlyOwnerCanInvitePlayers(){
         return onlyOwnerCanInvitePlayers;
     }
