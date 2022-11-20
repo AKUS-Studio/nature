@@ -1,6 +1,5 @@
 package works.akus.world.fishing.process;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -59,7 +58,7 @@ public class FishingProcessListener implements Listener {
 	}
 
 	@EventHandler
-	public void onFixTheCoil(PlayerInteractEvent event) {
+	public void onRightClickWhileFishing(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		if (event.getItem() == null)
 			return;
@@ -70,11 +69,6 @@ public class FishingProcessListener implements Listener {
 			return;
 
 		event.setCancelled(true);
-		FishingProcess fishingSession = World.get().getFishingManager().getFishingProcessesHandler()
-				.getFishingProcess(player);
-
-		fishingSession.setCoilFixed(!fishingSession.isCoilFixed());
-		player.sendMessage("Coil fixed: " + Boolean.toString(fishingSession.isCoilFixed()));
 
 	}
 

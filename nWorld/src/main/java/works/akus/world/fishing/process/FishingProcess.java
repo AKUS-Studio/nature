@@ -19,11 +19,12 @@ public class FishingProcess {
 	private ItemStack fishingRod;
 
 	private boolean isReelingInTheLine;
-	private boolean isCoilFixed;
+	private boolean isLineReachedLimit;
 
 	private double fishingLineLength;
 	private double fishingLineTension;
 	private double maxFishingLineTension = 10; // temporary value
+	private double maxFishingLineLength = 20; // temporary value
 
 	private ItemStack fish;
 	private double fishStrength;
@@ -40,7 +41,7 @@ public class FishingProcess {
 		this.hook = hook;
 
 		this.isReelingInTheLine = false;
-		this.isCoilFixed = false;
+		this.isLineReachedLimit = false;
 		this.isFishHooked = false;
 
 		this.fishVelocity = new Vector(0, 0, 0);
@@ -68,13 +69,20 @@ public class FishingProcess {
 		
 		Vector vectorBetweenPlayerAndHookInXZPlane = vectorBetweenPlayerAndHook.clone().setY(0);
 
-		if (!isCoilFixed || isReelingInTheLine) {
-			fishingLineLength = player.getLocation().distance(hook.getLocation());
+		
+		fishingLineLength = player.getLocation().distance(hook.getLocation());
+		
+		if(fishingLineLength>=maxFishingLineLength) {
+			setLineReachedLimit(true);
+		}
+		else {
+			setLineReachedLimit(false);
 		}
 		
-		if(isCoilFixed && playerLocation.distance(hookLocation) >= fishingLineLength) {
-			Vector vec = vectorBetweenPlayerAndHook.clone().normalize().multiply(playerLocation.distance(hookLocation) - fishingLineLength);
+		if(isLineReachedLimit) {
+			Vector vec = vectorBetweenPlayerAndHook.clone().normalize().multiply(playerLocation.distance(hookLocation) - maxFishingLineLength);
 			hook.setVelocity(hook.getVelocity().add(vec));
+			
 		}
 
 
@@ -109,13 +117,13 @@ public class FishingProcess {
 		else if (fishStrength > fishMass / 10)
 			fishStrength -= Math.random() * (fishMass / 10);
 
-		if (isCoilFixed || isReelingInTheLine)
+		if (isLineReachedLimit || isReelingInTheLine)
 			tension += fishStrength/20;
 
 		if (isReelingInTheLine) 
 			tension += fishMass/20;
 		
-		if(!isCoilFixed && !isReelingInTheLine && (tension-maxFishingLineTension/20)>0)
+		if(!isLineReachedLimit && !isReelingInTheLine && (tension-maxFishingLineTension/20)>0)
 			tension -= maxFishingLineTension/20;
 
 		printFishingLineTension(tension);
@@ -140,7 +148,7 @@ public class FishingProcess {
 
 		}
 
-		if (isCoilFixed && hookVelocity.dot(vectorBetweenPlayerAndHookInXZPlane) < 0) {
+		if (isLineReachedLimit && hookVelocity.dot(vectorBetweenPlayerAndHookInXZPlane) < 0) {
 			Vector perpendicularVector = getPerpendicularVectorInXZPlane(vectorBetweenPlayerAndHookInXZPlane);
 			hookVelocity = vectorizedProjectionOfAVector1OntoAVector2(hookVelocity, perpendicularVector).clone();
 
@@ -180,8 +188,8 @@ public class FishingProcess {
 
 	}
 
-	public void setCoilFixed(boolean value) {
-		isCoilFixed = value;
+	public void setLineReachedLimit(boolean value) {
+		isLineReachedLimit = value;
 	}
 
 	public void setReelingInTheLine(boolean value) {
@@ -204,8 +212,8 @@ public class FishingProcess {
 		return isReelingInTheLine;
 	}
 
-	public boolean isCoilFixed() {
-		return isCoilFixed;
+	public boolean isLineReachedLimit() {
+		return isLineReachedLimit;
 	}
 	
 	public boolean isFishHooked() {
