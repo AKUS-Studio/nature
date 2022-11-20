@@ -52,9 +52,7 @@ public class FishingProcess {
 
 		ticksCounter += 1;
 		if (isFishHooked) {
-			if (ticksCounter % FREQUENCY_OF_CHANGIN_THE_DIRECTION_OF_FISH == 0)
 				fishingLineTension = getNewFishingLineTension();
-			fishingLineTension = 0;
 		}
 		if (fishingLineTension > maxFishingLineTension) {
 			hook.remove();
@@ -63,14 +61,22 @@ public class FishingProcess {
 
 		Location hookLocation = hook.getLocation();
 		Location playerLocation = player.getLocation();
+		
+		
+		Vector vectorBetweenPlayerAndHook= new Vector(playerLocation.getX() - hookLocation.getX(), playerLocation.getY() - hookLocation.getY(),
+				playerLocation.getZ() - hookLocation.getZ());
+		
+		Vector vectorBetweenPlayerAndHookInXZPlane = vectorBetweenPlayerAndHook.clone().setY(0);
 
 		if (!isCoilFixed || isReelingInTheLine) {
-			fishingLineLength = new Vector(playerLocation.getX() - hookLocation.getX(),
-					playerLocation.getY() - hookLocation.getY(), playerLocation.getZ() - hookLocation.getZ()).length();
+			fishingLineLength = player.getLocation().distance(hook.getLocation());
+		}
+		
+		if(isCoilFixed && playerLocation.distance(hookLocation) >= fishingLineLength) {
+			Vector vec = vectorBetweenPlayerAndHook.clone().normalize().multiply(playerLocation.distance(hookLocation) - fishingLineLength);
+			hook.setVelocity(hook.getVelocity().add(vec));
 		}
 
-		Vector vectorBetweenPlayerAndHookInXZPlane = new Vector(playerLocation.getX() - hookLocation.getX(), 0,
-				playerLocation.getZ() - hookLocation.getZ());
 
 		if (vectorBetweenPlayerAndHookInXZPlane.length() < 1 && isReelingInTheLine) {
 			hook.remove();
@@ -96,7 +102,7 @@ public class FishingProcess {
 	}
 
 	private double getNewFishingLineTension() {
-		double tension = 0;
+		double tension = fishingLineTension;
 
 		if (Math.random() > 0.20 && fishStrength < (fishMass / 5))
 			fishStrength += Math.random() * (fishMass / 10);
@@ -104,11 +110,13 @@ public class FishingProcess {
 			fishStrength -= Math.random() * (fishMass / 10);
 
 		if (isCoilFixed || isReelingInTheLine)
-			tension += fishStrength;
+			tension += fishStrength/20;
 
-		if (isReelingInTheLine) {
-			tension += fishMass;
-		}
+		if (isReelingInTheLine) 
+			tension += fishMass/20;
+		
+		if(!isCoilFixed && !isReelingInTheLine && (tension-maxFishingLineTension/20)>0)
+			tension -= maxFishingLineTension/20;
 
 		printFishingLineTension(tension);
 		return tension;
@@ -204,13 +212,16 @@ public class FishingProcess {
 		double dotProduct = vector1.dot(vector2);
 		double projectionLength = dotProduct / (vector2.length());
 		Vector result = vector2.normalize().multiply(projectionLength);
-		double a = result.dot(result);
 		return result;
 	}
 
 	private Vector getPerpendicularVectorInXZPlane(Vector vector) {
 		Vector result = new Vector(-vector.getZ(), 0, vector.getX());
 		return result;
+	}
+
+	public double getFishingLineLength() {
+		return fishingLineLength;
 	}
 
 }

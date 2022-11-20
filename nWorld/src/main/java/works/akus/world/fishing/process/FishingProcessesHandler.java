@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import net.kyori.adventure.text.Component;
+
 public class FishingProcessesHandler{
 	
 	private JavaPlugin plugin;
@@ -38,6 +40,7 @@ public class FishingProcessesHandler{
 	}
 	
 	public void stopFishingProcess(Player player) {
+		player.sendActionBar(Component.text(" "));
 		activeFishingProcesses.remove(player);
 	}
 	
