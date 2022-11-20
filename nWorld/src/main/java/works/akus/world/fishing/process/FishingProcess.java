@@ -207,6 +207,10 @@ public class FishingProcess {
 	public boolean isCoilFixed() {
 		return isCoilFixed;
 	}
+	
+	public boolean isFishHooked() {
+		return isFishHooked;
+	}
 
 	private Vector vectorizedProjectionOfAVector1OntoAVector2(Vector vector1, Vector vector2) {
 		double dotProduct = vector1.dot(vector2);
