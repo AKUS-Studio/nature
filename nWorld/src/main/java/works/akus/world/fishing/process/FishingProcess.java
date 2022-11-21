@@ -32,7 +32,7 @@ public class FishingProcess {
 	private boolean isFishHooked;
 	private Vector fishVelocity;
 
-	private final int FREQUENCY_OF_CHANGIN_THE_DIRECTION_OF_FISH = 5; // in ticks
+	private final int FREQUENCY_OF_CHANGIN_THE_DIRECTION_OF_FISH = 3; // in ticks
 
 	private int ticksCounter;
 
@@ -48,8 +48,10 @@ public class FishingProcess {
 	}
 
 	protected void fishingLogic() {
-		if (hook.isDead())
+		if (hook.isDead()) {
 			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
+			return;
+		}
 
 		ticksCounter += 1;
 		if (isFishHooked) {
@@ -58,6 +60,7 @@ public class FishingProcess {
 		if (fishingLineTension > maxFishingLineTension) {
 			hook.remove();
 			player.sendMessage("Рыба сорвалась");
+			return;
 		}
 
 		Location hookLocation = hook.getLocation();

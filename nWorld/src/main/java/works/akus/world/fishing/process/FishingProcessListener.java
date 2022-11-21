@@ -38,6 +38,8 @@ public class FishingProcessListener implements Listener {
 			    @Override
 			    public void onPacketSending(PacketEvent event) {
 			    	Player player = event.getPlayer();
+			    	if(!World.get().getFishingManager().getFishingProcessesHandler().isFishingProcessActive(player))
+			    		return;
 			    	if(!World.get().getFishingManager().getFishingProcessesHandler().getFishingProcess(player).isFishHooked())
 						return;
 			    	PacketContainer packet = event.getPacket();
