@@ -9,7 +9,6 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerFishEvent.State;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolManager;
@@ -19,7 +18,6 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 
-import works.akus.mauris.registry.ItemRegistry;
 import works.akus.world.World;
 
 public class FishingProcessListener implements Listener {
@@ -83,8 +81,7 @@ public class FishingProcessListener implements Listener {
 		if(World.get().getFishingManager().getFishingProcessesHandler().getFishingProcess(player).isFishHooked())
 			return;
 
-		ItemStack fish = ItemRegistry.getItemStack("cod");
-		World.get().getFishingManager().getFishingProcessesHandler().getFishingProcess(player).hookFish(fish, 0.2, 8);
+		World.get().getFishingManager().getFishingProcessesHandler().getFishingProcess(player).hookRandomBalancedGeneratedFish();
 	}
 
 	@EventHandler

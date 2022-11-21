@@ -3,7 +3,6 @@ package works.akus.world.fishing;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import works.akus.mauris.objects.fonts.Glyph;
-import works.akus.mauris.objects.fonts.GlyphBuilder;
 import works.akus.mauris.registry.GlyphRegistry;
 import works.akus.mauris.registry.ItemRegistry;
 import works.akus.world.fishing.items.CustomFish;
@@ -31,8 +30,8 @@ public class FishingManager {
 		ItemRegistry.register("standard_fishing_rod", new CustomFishingRod(FishingRodType.STANDARD_FISHING_ROD));
 		
 		// Register fishes
-		ItemRegistry.register("cod", new CustomFish(CustomFishType.COD));
-		ItemRegistry.register("bamboo_fish", new CustomFish(CustomFishType.BAMBOO_FISH));
+		ItemRegistry.register(CustomFishType.COD.getId(), new CustomFish(CustomFishType.COD));
+		ItemRegistry.register(CustomFishType.BAMBOO_FISH.getId(), new CustomFish(CustomFishType.BAMBOO_FISH));
 	}
 	
 	private void regiserGlyphs() {

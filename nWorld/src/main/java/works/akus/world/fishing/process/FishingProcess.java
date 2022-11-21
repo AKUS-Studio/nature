@@ -1,32 +1,38 @@
 package works.akus.world.fishing.process;
 
+import java.util.Random;
+
 import org.bukkit.Location;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.FishHook.HookState;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
+
+import com.google.common.collect.Lists;
 
 import net.kyori.adventure.text.Component;
 import works.akus.mauris.objects.fonts.GlyphBuilder;
 import works.akus.mauris.registry.GlyphRegistry;
+import works.akus.mauris.registry.ItemRegistry;
 import works.akus.world.World;
+import works.akus.world.fishing.types.CustomFishType;
 
 public class FishingProcess {
 
 	private Player player;
 	private FishHook hook;
-	private ItemStack fishingRod;
 
 	private boolean isReelingInTheLine;
 	private boolean isLineReachedLimit;
 
 	private double fishingLineLength;
 	private double fishingLineTension;
-	private double maxFishingLineTension = 10; // temporary value
-	private double maxFishingLineLength = 20; // temporary value
+	private final double MAX_FISHING_LINE_TENSION = 10; // temporary value
+	private final double MAX_FISHING_LINE_LENGTH = 20; // temporary value
 
-	private ItemStack fish;
+	private CustomFishType customFishType;
 	private double fishStrength;
 	private double fishMass;
 	private boolean isFishHooked;
@@ -55,9 +61,9 @@ public class FishingProcess {
 
 		ticksCounter += 1;
 		if (isFishHooked) {
-				fishingLineTension = getNewFishingLineTension();
+			fishingLineTension = getNewFishingLineTension();
 		}
-		if (fishingLineTension > maxFishingLineTension) {
+		if (fishingLineTension > MAX_FISHING_LINE_TENSION) {
 			hook.remove();
 			player.sendMessage("Рыба сорвалась");
 			return;
@@ -65,35 +71,46 @@ public class FishingProcess {
 
 		Location hookLocation = hook.getLocation();
 		Location playerLocation = player.getLocation();
-		
-		
-		Vector vectorBetweenPlayerAndHook= new Vector(playerLocation.getX() - hookLocation.getX(), playerLocation.getY() - hookLocation.getY(),
-				playerLocation.getZ() - hookLocation.getZ());
-		
+
+		Vector vectorBetweenPlayerAndHook = new Vector(playerLocation.getX() - hookLocation.getX(),
+				playerLocation.getY() - hookLocation.getY(), playerLocation.getZ() - hookLocation.getZ());
+
 		Vector vectorBetweenPlayerAndHookInXZPlane = vectorBetweenPlayerAndHook.clone().setY(0);
 
-		
 		fishingLineLength = player.getLocation().distance(hook.getLocation());
-		
-		if(fishingLineLength>=maxFishingLineLength) {
+
+		if (fishingLineLength >= MAX_FISHING_LINE_LENGTH) {
 			setLineReachedLimit(true);
-		}
-		else {
+		} else {
 			setLineReachedLimit(false);
 		}
-		
-		if(isLineReachedLimit) {
-			Vector vec = vectorBetweenPlayerAndHook.clone().normalize().multiply(playerLocation.distance(hookLocation) - maxFishingLineLength);
-			hook.setVelocity(hook.getVelocity().add(vec));
-			
-		}
 
+		if (isLineReachedLimit) {
+			Vector vec = vectorBetweenPlayerAndHook.clone().normalize()
+					.multiply(playerLocation.distance(hookLocation) - MAX_FISHING_LINE_LENGTH);
+			hook.setVelocity(hook.getVelocity().add(vec));
+
+		}
 
 		if (vectorBetweenPlayerAndHookInXZPlane.length() < 1 && isReelingInTheLine) {
 			hook.remove();
 			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
-			if (isFishHooked)
-				player.getInventory().addItem(fish);
+			if (isFishHooked) {
+				ItemStack fishItem = ItemRegistry.getItemStack(customFishType.getId());
+				ItemMeta fishItemMeta = fishItem.getItemMeta();
+
+				double fishMassRounded = fishMass;
+				long factor = (long) Math.pow(10, 2);
+				fishMassRounded = fishMassRounded * factor;
+				long tmp = Math.round(fishMassRounded);
+				fishMassRounded = (double) tmp / factor;
+
+				String lore = "Масса: " + Double.toString(fishMassRounded);
+				fishItemMeta.lore(Lists.newArrayList(Component.text(lore)));
+				fishItem.setItemMeta(fishItemMeta);
+
+				player.getInventory().addItem(fishItem);
+			}
 		}
 
 		Vector hookVelocity = getNewHookVelocity(vectorBetweenPlayerAndHookInXZPlane);
@@ -101,14 +118,13 @@ public class FishingProcess {
 	}
 
 	private void printFishingLineTension(double tension) {
-		int tensionLineCoordinate = (int) Math.round((37 / maxFishingLineTension) * tension);
+		int tensionLineCoordinate = (int) Math.round((37 / MAX_FISHING_LINE_TENSION) * tension);
 
-		Component component = new GlyphBuilder()
-				.offset(tensionLineCoordinate).offset(-40) // idk how but it fixed offset in action bar
-				.append(GlyphRegistry.getGlyph("tension_bar"))
-				.offset(tensionLineCoordinate).offset(-40)
+		Component component = new GlyphBuilder().offset(tensionLineCoordinate).offset(-40) // idk how but it fixed
+																							// offset in action bar
+				.append(GlyphRegistry.getGlyph("tension_bar")).offset(tensionLineCoordinate).offset(-40)
 				.append(GlyphRegistry.getGlyph("tension_line")).buildAsComponent();
-		
+
 		player.sendActionBar(component);
 	}
 
@@ -121,13 +137,13 @@ public class FishingProcess {
 			fishStrength -= Math.random() * (fishMass / 10);
 
 		if (isLineReachedLimit || isReelingInTheLine)
-			tension += fishStrength/20;
+			tension += fishStrength / 20;
 
-		if (isReelingInTheLine) 
-			tension += fishMass/20;
-		
-		if(!isLineReachedLimit && !isReelingInTheLine && (tension-maxFishingLineTension/20)>0)
-			tension -= maxFishingLineTension/20;
+		if (isReelingInTheLine)
+			tension += fishMass / 20;
+
+		if (!isLineReachedLimit && !isReelingInTheLine && (tension - MAX_FISHING_LINE_TENSION / 20) > 0)
+			tension -= MAX_FISHING_LINE_TENSION / 20;
 
 		printFishingLineTension(tension);
 		return tension;
@@ -199,8 +215,16 @@ public class FishingProcess {
 		isReelingInTheLine = value;
 	}
 
-	public void hookFish(ItemStack fish, double fishStrength, double fishMass) {
-		this.fish = fish;
+	public void hookRandomBalancedGeneratedFish() {
+		CustomFishType fishType = CustomFishType.getRandomFishType();
+		Random random = new Random();
+		double mass = random.nextDouble(MAX_FISHING_LINE_TENSION - 4, MAX_FISHING_LINE_TENSION);
+		double strength = random.nextDouble(mass / 60, mass / 35);
+		hookFish(fishType, strength, mass);
+	}
+
+	public void hookFish(CustomFishType fishType, double fishStrength, double fishMass) {
+		this.customFishType = fishType;
 		this.fishStrength = fishStrength;
 		this.fishMass = fishMass;
 
@@ -218,7 +242,7 @@ public class FishingProcess {
 	public boolean isLineReachedLimit() {
 		return isLineReachedLimit;
 	}
-	
+
 	public boolean isFishHooked() {
 		return isFishHooked;
 	}
