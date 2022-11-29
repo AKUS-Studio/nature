@@ -12,6 +12,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import works.akus.mauris.objects.sounds.CustomSound;
+import works.akus.mauris.registry.SoundRegistry;
 
 public class TestItem extends MaurisItem {
 
@@ -36,7 +38,7 @@ public class TestItem extends MaurisItem {
 
     //Particles And Sound
     HashMap<Player, Long> itemsHoldingCooldown = new HashMap<>();
-    int cooldown = 5;
+    int cooldown = 1;
     @Override
     public void onStartHolding(MaurisItem maurisItem, ItemStack item, PlayerItemHeldEvent e) {
         Location l = e.getPlayer().getLocation();
@@ -47,6 +49,11 @@ public class TestItem extends MaurisItem {
             if(timestamp + cooldown * 1000L < System.currentTimeMillis()){
                 l.getWorld().spawnParticle(Particle.FLAME, l, 100, 10, 10, 10);
                 itemsHoldingCooldown.remove(e.getPlayer());
+
+                CustomSound sound = SoundRegistry.getSound("test.mystic.impact");
+                sound.play(16, e.getPlayer().getLocation());
+                itemsHoldingCooldown.put(e.getPlayer(), System.currentTimeMillis());
+                return;
             }
         }else{
             itemsHoldingCooldown.put(e.getPlayer(), System.currentTimeMillis());
