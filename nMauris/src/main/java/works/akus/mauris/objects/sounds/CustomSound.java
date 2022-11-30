@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.List;
 
@@ -31,124 +32,29 @@ public class CustomSound {
     private Sound sound;
     private Audience audience;
 
-    /***/
-
-    public void playForAll(){
-        playForAll(defaultCategory, defaultVolume, defaultPitch);
-    }
-
-    public void playForAll(Sound.Source category){
-        playForAll(category, defaultVolume, defaultPitch);
-    }
-
-    public void playForAll(Sound.Source category, float volume){
-        playForAll(category, volume, defaultPitch);
-    }
 
     /**
-     * Playing sound for all players on the server without Location nor Emitter
+     * via SoundPlayData
      */
-    public void playForAll(Sound.Source category, float volume, float pitch){
-        sound = Sound.sound(Key.key(namespace, keyValue), category, volume, pitch);
-        audience = Audience.audience(Bukkit.getOnlinePlayers());
+    public void play(SoundPlayData data){
 
-        audience.playSound(sound);
-    }
+        audience = Audience.audience(data.players);
+        sound = Sound.sound(Key.key(namespace, keyValue), data.getSource(defaultCategory), data.getVolume(defaultVolume), data.getPitch(defaultPitch));
 
-    /***/
-
-    /**
-     * Playing sound for players without location
-     */
-    public void play(List<Player> players, Sound.Source category, float volume, float pitch){
-        sound = Sound.sound(Key.key(namespace, keyValue), category, volume, pitch);
-        audience = Audience.audience(players);
-
-        audience.playSound(sound);
-    }
-
-    /**
-     * Playing sound from location to Players
-     */
-    public void play(List<Player> players, Location location, Sound.Source category, float volume, float pitch){
-        sound = Sound.sound(Key.key(namespace, keyValue), category, volume, pitch);
-        audience = Audience.audience(players);
-
-        audience.playSound(sound, location.getX(), location.getY(), location.getZ());
-    }
-
-    /**
-     * Playing sound from emitter to Players
-     */
-    public void play(List<Player> players, Sound.Emitter emitter, Sound.Source category, float volume, float pitch){
-        sound = Sound.sound(Key.key(namespace, keyValue), category, volume, pitch);
-        audience = Audience.audience(players);
-
-        audience.playSound(sound, emitter);
-    }
-
-    /***/
-    public void play(double radius, Location location){
-        play(radius, location, defaultCategory, defaultVolume, defaultPitch);
-    }
-
-    public void play(double radius, Location location, Sound.Source category){
-        play(radius, location, category, defaultVolume, defaultPitch);
-    }
-
-    public void play(double radius, Location location, Sound.Source category, float volume){
-        play(radius, location, category, volume, defaultPitch);
-    }
-    /***/
-
-    /**
-     * Playing sound from Location to the radius
-     */
-    public void play(double radius, Location location, Sound.Source category, float volume, float pitch){
-        sound = Sound.sound(Key.key(namespace, keyValue), category, volume, pitch);
-        audience = Audience.audience(location.getNearbyPlayers(radius));
-
-        audience.playSound(sound, location.getX(), location.getY(), location.getZ());
-    }
-    /***/
-
-    /**
-     * Playing sound from Location to the Player
-     */
-
-    public void play(Player player, Location location, Sound.Source category, float volume, float pitch){
-        sound = Sound.sound(Key.key(namespace, keyValue), category, volume, pitch);
-        player.playSound(sound, location.getX(), location.getY(), location.getZ());
-    }
-    /***/
-
-    /**
-     * Playing sound from Emitter to the Player
-     */
-    public void play(Player player, Sound.Emitter emitter, Sound.Source category, float volume, float pitch){
-        sound = Sound.sound(Key.key(namespace, keyValue), category, volume, pitch);
-        player.playSound(sound, emitter);
-    }
-    /***/
-
-    public void play(double radius, Sound.Emitter emitter){
-        play(radius, emitter, defaultCategory, defaultVolume, defaultPitch);
-    }
-
-    /**
-     * Playing sound from emitter to the radius
-     */
-    public void play(double radius, Sound.Emitter emitter, Sound.Source category, float volume, float pitch){
-        if(!(emitter instanceof Entity)){
-            throw new RuntimeException("Emitter should be an entity");
+        if(data.getRadius() > 0){
+            audience = Audience.audience(data.getLocation().getNearbyPlayers(data.getRadius()));
         }
 
-        Location l = ((Entity) emitter).getLocation();
+        if(data.isFromEmitter()){
+            audience.playSound(sound, data.getEmitter());
+        }
+        else if(data.isFromLocation){
+            audience.playSound(sound, data.getLocation().getX(), data.getLocation().getY(), data.getLocation().getZ());
+        }
+        else{
+            audience.playSound(sound);
+        }
 
-        sound = Sound.sound(Key.key(namespace, keyValue), category, volume, pitch);
-        audience = Audience.audience(l.getNearbyPlayers(radius));
-
-        audience.playSound(sound, emitter);
     }
 
     /**

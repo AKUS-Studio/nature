@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import works.akus.mauris.objects.sounds.CustomSound;
+import works.akus.mauris.objects.sounds.SoundPlayData;
 import works.akus.mauris.registry.SoundRegistry;
 
 public class TestItem extends MaurisItem {
@@ -51,7 +52,7 @@ public class TestItem extends MaurisItem {
                 itemsHoldingCooldown.remove(e.getPlayer());
 
                 CustomSound sound = SoundRegistry.getSound("test.mystic.impact");
-                sound.play(16, e.getPlayer().getLocation());
+                sound.play(SoundPlayData.create(16, e.getPlayer()));
                 itemsHoldingCooldown.put(e.getPlayer(), System.currentTimeMillis());
                 return;
             }
