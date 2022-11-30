@@ -1,6 +1,7 @@
 package works.akus.world.fishing.process;
 
 import org.bukkit.Material;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,6 +19,12 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import works.akus.mauris.objects.sounds.CustomSound;
+import works.akus.mauris.objects.sounds.SoundPlayData;
+import works.akus.mauris.objects.sounds.SoundTask;
+import works.akus.mauris.registry.SoundRegistry;
 import works.akus.world.World;
 
 public class FishingProcessListener implements Listener {
@@ -47,6 +54,14 @@ public class FishingProcessListener implements Listener {
 			    }
 			});
 	}
+
+	private static final CustomSound throwSoundStart = SoundRegistry.getSound("fishing.throw.start");
+	private static final CustomSound throwSound = SoundRegistry.getSound("fishing.throw");
+	private static final CustomSound throwSoundEnd = SoundRegistry.getSound("fishing.throw.end");
+
+	private static final SoundTask throwSoundTaskTemplate =
+			new SoundTask(null, throwSound, throwSoundStart, throwSoundEnd, 15, 15);
+
 	@EventHandler
 	public void onCastAFishingRod(PlayerFishEvent event) {
 		if (event.getState() != PlayerFishEvent.State.FISHING)
@@ -55,6 +70,30 @@ public class FishingProcessListener implements Listener {
 		World.get().getFishingManager().getFishingProcessesHandler().startFishingProcess(event.getPlayer(),
 				event.getHook());
 		World.get().getLogger().info("Player started fishing");
+
+		startSoundThrowTask(event.getPlayer(), event.getHook());
+	}
+
+	private void startSoundThrowTask(Player player, FishHook hook){
+
+		SoundTask task = throwSoundTaskTemplate.copy()
+				.setPlayData(SoundPlayData.create(16, player));
+
+		task.run();
+
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+
+				if(hook.isDead() || hook.isOnGround()
+				|| hook.getState() != FishHook.HookState.UNHOOKED){
+					task.cancel();
+					cancel();
+				}
+
+			}
+		}.runTaskTimer(World.get(), 14, 15);
+
 	}
 
 	@EventHandler

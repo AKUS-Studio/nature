@@ -3,8 +3,10 @@ package works.akus.world.fishing;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import works.akus.mauris.objects.fonts.Glyph;
+import works.akus.mauris.objects.sounds.CustomSound;
 import works.akus.mauris.registry.GlyphRegistry;
 import works.akus.mauris.registry.ItemRegistry;
+import works.akus.mauris.registry.SoundRegistry;
 import works.akus.world.fishing.items.CustomFish;
 import works.akus.world.fishing.items.CustomFishingRod;
 import works.akus.world.fishing.process.FishingProcessListener;
@@ -22,6 +24,7 @@ public class FishingManager {
 		
 		registerItems();
 		regiserGlyphs();
+		registerSounds();
 	}
 	
 	private void registerItems() {
@@ -32,6 +35,19 @@ public class FishingManager {
 		// Register fishes
 		ItemRegistry.register(CustomFishType.COD.getId(), new CustomFish(CustomFishType.COD));
 		ItemRegistry.register(CustomFishType.BAMBOO_FISH.getId(), new CustomFish(CustomFishType.BAMBOO_FISH));
+	}
+
+	private void registerSounds(){
+		SoundRegistry.registerSound(new CustomSound("nature", "fishing.unwind"));
+
+		SoundRegistry.registerSound(new CustomSound("nature", "fishing.reel"));
+		SoundRegistry.registerSound(new CustomSound("nature", "fishing.reel.start"));
+
+		SoundRegistry.registerSound(new CustomSound("nature", "fishing.splash"));
+
+		SoundRegistry.registerSound(new CustomSound("nature", "fishing.throw"));
+		SoundRegistry.registerSound(new CustomSound("nature", "fishing.throw.start"));
+		SoundRegistry.registerSound(new CustomSound("nature", "fishing.throw.end"));
 	}
 	
 	private void regiserGlyphs() {

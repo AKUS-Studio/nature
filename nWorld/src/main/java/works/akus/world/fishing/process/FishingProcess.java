@@ -14,12 +14,18 @@ import com.google.common.collect.Lists;
 
 import net.kyori.adventure.text.Component;
 import works.akus.mauris.objects.fonts.GlyphBuilder;
+import works.akus.mauris.objects.sounds.CustomSound;
+import works.akus.mauris.objects.sounds.SoundPlayData;
+import works.akus.mauris.objects.sounds.SoundTask;
 import works.akus.mauris.registry.GlyphRegistry;
 import works.akus.mauris.registry.ItemRegistry;
+import works.akus.mauris.registry.SoundRegistry;
 import works.akus.world.World;
 import works.akus.world.fishing.types.CustomFishType;
 
 public class FishingProcess {
+
+	private RodState state;
 
 	private Player player;
 	private FishHook hook;
@@ -40,6 +46,24 @@ public class FishingProcess {
 
 	private final int FREQUENCY_OF_CHANGIN_THE_DIRECTION_OF_FISH = 3; // in ticks
 
+	//Sounds
+	private static final CustomSound reelingSound = SoundRegistry.getSound("fishing.reel");
+	private static final CustomSound reelingStartSound = SoundRegistry.getSound("fishing.reel.start");
+
+	private static final CustomSound unwindingSound = SoundRegistry.getSound("fishing.unwind");
+
+	private static final SoundTask reelingSTTemplate
+			= new SoundTask(null, reelingSound, reelingStartSound, 15,15);
+
+	private static final SoundTask unwindingSTTemplate
+			= new SoundTask(null, unwindingSound, 15 ,15);
+
+	private final SoundTask currentReelingTask;
+	private final SoundTask currentUnwindingTask;
+
+	private SoundTask currentTask = SoundTask.empty();
+	//
+
 	private int ticksCounter;
 
 	public FishingProcess(Player player, FishHook hook) {
@@ -51,11 +75,17 @@ public class FishingProcess {
 		this.isFishHooked = false;
 
 		this.fishVelocity = new Vector(0, 0, 0);
+
+		this.state = RodState.WAITING;
+		this.currentReelingTask = reelingSTTemplate.copy().setPlayData(SoundPlayData.create(16, player));
+		this.currentUnwindingTask = unwindingSTTemplate.copy().setPlayData(SoundPlayData.create(16, player));
 	}
 
 	protected void fishingLogic() {
 		if (hook.isDead()) {
 			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
+			currentTask.cancel();
+			state = RodState.END;
 			return;
 		}
 
@@ -79,22 +109,19 @@ public class FishingProcess {
 
 		fishingLineLength = player.getLocation().distance(hook.getLocation());
 
-		if (fishingLineLength >= MAX_FISHING_LINE_LENGTH) {
-			setLineReachedLimit(true);
-		} else {
-			setLineReachedLimit(false);
-		}
+		setLineReachedLimit(fishingLineLength >= MAX_FISHING_LINE_LENGTH);
 
 		if (isLineReachedLimit) {
 			Vector vec = vectorBetweenPlayerAndHook.clone().normalize()
 					.multiply(playerLocation.distance(hookLocation) - MAX_FISHING_LINE_LENGTH);
 			hook.setVelocity(hook.getVelocity().add(vec));
-
 		}
 
 		if (vectorBetweenPlayerAndHookInXZPlane.length() < 1 && isReelingInTheLine) {
 			hook.remove();
 			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
+			currentTask.cancel();
+			state = RodState.END;
 			if (isFishHooked) {
 				ItemStack fishItem = ItemRegistry.getItemStack(customFishType.getId());
 				ItemMeta fishItemMeta = fishItem.getItemMeta();
@@ -110,11 +137,33 @@ public class FishingProcess {
 				fishItem.setItemMeta(fishItemMeta);
 
 				player.getInventory().addItem(fishItem);
-			}
+			};
 		}
 
 		Vector hookVelocity = getNewHookVelocity(vectorBetweenPlayerAndHookInXZPlane);
 		hook.setVelocity(hookVelocity);
+
+		//Sounds
+		switch (state){
+
+			case UNWINDING:
+				if(currentTask == currentUnwindingTask) break;
+				currentTask.cancel();
+				currentTask = currentUnwindingTask;
+				currentTask.run();
+				break;
+			case REELING:
+				if(currentTask == currentReelingTask) break;
+				currentTask.cancel();
+				currentTask = currentReelingTask;
+				currentTask.run();
+				break;
+			default:
+				currentTask.cancel();
+				currentTask = SoundTask.empty();
+				break;
+		}
+
 	}
 
 	private void printFishingLineTension(double tension) {
@@ -165,16 +214,17 @@ public class FishingProcess {
 				velocityFromCoil.setY(0.25);
 			hookVelocity.add(velocityFromCoil);
 
-		}
+			state = RodState.REELING;
+		}else if(isFishHooked) state = RodState.UNWINDING;
 
 		if (isLineReachedLimit && hookVelocity.dot(vectorBetweenPlayerAndHookInXZPlane) < 0) {
 			Vector perpendicularVector = getPerpendicularVectorInXZPlane(vectorBetweenPlayerAndHookInXZPlane);
 			hookVelocity = vectorizedProjectionOfAVector1OntoAVector2(hookVelocity, perpendicularVector).clone();
-
 		}
 
 		if (!isReelingInTheLine && !isFishHooked) {
 			hookVelocity = hook.getVelocity();
+			state = RodState.WAITING;
 		}
 
 		return hookVelocity;
@@ -213,6 +263,7 @@ public class FishingProcess {
 
 	public void setReelingInTheLine(boolean value) {
 		isReelingInTheLine = value;
+
 	}
 
 	public void hookRandomBalancedGeneratedFish() {
@@ -233,6 +284,10 @@ public class FishingProcess {
 
 	public FishHook getHook() {
 		return hook;
+	}
+
+	public RodState getState() {
+		return state;
 	}
 
 	public boolean isReelingInTheLine() {
@@ -261,6 +316,13 @@ public class FishingProcess {
 
 	public double getFishingLineLength() {
 		return fishingLineLength;
+	}
+
+	enum RodState{
+		REELING,
+		UNWINDING,
+		WAITING,
+		END,
 	}
 
 }
