@@ -59,7 +59,7 @@ public class FishingProcessesHandler{
 			@Override
 			public void run() {
 				for(FishingProcess fishingProcess : activeFishingProcesses.values()) {
-					fishingProcess.fishingLogic();
+						fishingProcess.fishingLogic();
 				}
 			}
 		};

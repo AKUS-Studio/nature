@@ -82,9 +82,11 @@ public class FishingProcess {
 	}
 
 	protected void fishingLogic() {
+		System.out.println(state);
+
 		if (hook.isDead()) {
-			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
 			currentTask.cancel();
+			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
 			state = RodState.END;
 			return;
 		}
@@ -95,6 +97,8 @@ public class FishingProcess {
 		}
 		if (fishingLineTension > MAX_FISHING_LINE_TENSION) {
 			hook.remove();
+			currentTask.cancel();
+			state = RodState.END;
 			player.sendMessage("Рыба сорвалась");
 			return;
 		}
@@ -119,8 +123,8 @@ public class FishingProcess {
 
 		if (vectorBetweenPlayerAndHookInXZPlane.length() < 1 && isReelingInTheLine) {
 			hook.remove();
-			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
 			currentTask.cancel();
+			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
 			state = RodState.END;
 			if (isFishHooked) {
 				ItemStack fishItem = ItemRegistry.getItemStack(customFishType.getId());
@@ -137,7 +141,8 @@ public class FishingProcess {
 				fishItem.setItemMeta(fishItemMeta);
 
 				player.getInventory().addItem(fishItem);
-			};
+			}
+			return;
 		}
 
 		Vector hookVelocity = getNewHookVelocity(vectorBetweenPlayerAndHookInXZPlane);

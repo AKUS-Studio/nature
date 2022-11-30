@@ -5,6 +5,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import works.akus.mauris.Mauris;
 
+import java.util.UUID;
+
 /**
  * For sounds that should be repeated until stopped
  */
@@ -48,7 +50,7 @@ public class SoundTask {
     }
     
     BukkitTask task;
-    boolean cancelSync;
+    boolean cancelSync = true;
 
     boolean canceled;
     boolean running;
@@ -65,12 +67,13 @@ public class SoundTask {
         task = new BukkitRunnable() {
             @Override
             public void run() {
-                repeatingSound.play(playData);
-
                 if(cancelSync && canceled){
                     if(endSound != null) endSound.play(playData);
-                    task.cancel();
+                    cancel();
+                    return;
                 }
+
+                repeatingSound.play(playData);
             }
         }
         .runTaskTimer(plugin, delay, period);
