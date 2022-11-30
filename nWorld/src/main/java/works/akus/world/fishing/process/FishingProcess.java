@@ -82,8 +82,6 @@ public class FishingProcess {
 	}
 
 	protected void fishingLogic() {
-		System.out.println(state);
-
 		if (hook.isDead()) {
 			currentTask.cancel();
 			World.get().getFishingManager().getFishingProcessesHandler().stopFishingProcess(player);
