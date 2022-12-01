@@ -52,11 +52,14 @@ public class FishingProcess {
 
 	private static final CustomSound unwindingSound = SoundRegistry.getSound("fishing.unwind");
 
+	private static final CustomSound successSound = SoundRegistry.getSound("fishing.success");
+	private static final CustomSound failureSound = SoundRegistry.getSound("fishing.failure");
+
 	private static final SoundTask reelingSTTemplate
-			= new SoundTask(null, reelingSound, reelingStartSound, 15,15);
+			= new SoundTask(null, reelingSound, reelingStartSound, 10,10);
 
 	private static final SoundTask unwindingSTTemplate
-			= new SoundTask(null, unwindingSound, 15 ,15);
+			= new SoundTask(null, unwindingSound, 9 ,7);
 
 	private final SoundTask currentReelingTask;
 	private final SoundTask currentUnwindingTask;
@@ -97,6 +100,7 @@ public class FishingProcess {
 			hook.remove();
 			currentTask.cancel();
 			state = RodState.END;
+			failureSound.play(SoundPlayData.create(16, player));
 			player.sendMessage("Рыба сорвалась");
 			return;
 		}
@@ -138,6 +142,7 @@ public class FishingProcess {
 				fishItemMeta.lore(Lists.newArrayList(Component.text(lore)));
 				fishItem.setItemMeta(fishItemMeta);
 
+				successSound.play(SoundPlayData.create(16, hookLocation));
 				player.getInventory().addItem(fishItem);
 			}
 			return;

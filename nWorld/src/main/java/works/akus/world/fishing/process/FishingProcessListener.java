@@ -60,7 +60,7 @@ public class FishingProcessListener implements Listener {
 	private static final CustomSound throwSoundEnd = SoundRegistry.getSound("fishing.throw.end");
 
 	private static final SoundTask throwSoundTaskTemplate =
-			new SoundTask(null, throwSound, throwSoundStart, throwSoundEnd, 15, 15);
+			new SoundTask(null, throwSound, throwSoundStart, throwSoundEnd, 7, 10);
 
 	@EventHandler
 	public void onCastAFishingRod(PlayerFishEvent event) {

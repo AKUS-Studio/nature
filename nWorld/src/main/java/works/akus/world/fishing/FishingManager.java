@@ -48,6 +48,9 @@ public class FishingManager {
 		SoundRegistry.registerSound(new CustomSound("nature", "fishing.throw"));
 		SoundRegistry.registerSound(new CustomSound("nature", "fishing.throw.start"));
 		SoundRegistry.registerSound(new CustomSound("nature", "fishing.throw.end"));
+
+		SoundRegistry.registerSound(new CustomSound("nature", "fishing.failure"));
+		SoundRegistry.registerSound(new CustomSound("nature", "fishing.success"));
 	}
 	
 	private void regiserGlyphs() {
