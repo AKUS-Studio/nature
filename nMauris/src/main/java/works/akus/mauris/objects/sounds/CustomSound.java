@@ -40,9 +40,12 @@ public class CustomSound {
 
         audience = Audience.audience(data.players);
         sound = Sound.sound(Key.key(namespace, keyValue), data.getSource(defaultCategory), data.getVolume(defaultVolume), data.getPitch(defaultPitch));
+        Location location;
+        if(data.isFromEmitter()) location = ((Entity)data.getEmitter()).getLocation();
+                else location = data.getLocation();
 
         if(data.getRadius() > 0){
-            audience = Audience.audience(data.getLocation().getNearbyPlayers(data.getRadius()));
+            audience = Audience.audience(location.getNearbyPlayers(data.getRadius()));
         }
 
         if(data.isFromEmitter()){
